@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC Hardware Weekly Report, Azraq Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#1E3A5F;min-height:100vh}
+.grid-bg{position:fixed;inset:0;opacity:.03;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,33,71,.15) 39px,rgba(0,33,71,.15) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,33,71,.15) 39px,rgba(0,33,71,.15) 40px)}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+header{border-bottom:1px solid #E5E7EB;padding-bottom:18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.tag{font-size:10px;letter-spacing:3px;color:#117ACA;margin-bottom:6px;font-weight:600}
+h1{font-size:clamp(22px,4vw,34px);font-weight:700;line-height:1.1;color:#002147}
+h1 span{color:#117ACA}
+.meta{font-size:10px;color:#64748B;line-height:2;text-align:right}
+.meta .int{color:#117ACA;font-weight:600}
+nav{display:flex;gap:2px;margin-bottom:22px;border-bottom:1px solid #E5E7EB;overflow-x:auto}
+nav button{font-family:'Inter',sans-serif;font-size:11px;padding:10px 16px;background:none;border:none;cursor:pointer;color:#64748B;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+nav button.active{color:#117ACA;border-bottom-color:#117ACA}
+nav button:hover{color:#002E63}
+.tab{display:none}.tab.active{display:block}
+.summary{font-size:14px;line-height:1.8;color:#334155;margin:0 0 24px;padding:14px 18px;background:#EFF6FF;border:1px solid rgba(17,122,202,.15);border-radius:6px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:28px}
+.stat{padding:12px 14px;background:#FFFFFF;border-radius:6px;border-left:3px solid var(--sc);box-shadow:0 1px 3px rgba(0,33,71,.06)}
+.stat-v{font-size:24px;color:var(--sc);line-height:1;margin-bottom:4px;font-weight:700}
+.stat-v a{color:inherit;text-decoration:none;transition:opacity .2s}
+.stat-v a:hover{opacity:.75}
+.stat-l{font-size:9px;color:#64748B}
+.stat-l a{color:#64748B;text-decoration:none;font-style:italic}
+.stat-l a:hover{color:#334155}
+.section-label{font-size:10px;letter-spacing:2px;color:#117ACA;margin-bottom:10px;font-weight:600}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-size:9px;letter-spacing:1px;color:#64748B;text-align:left;padding:8px;font-weight:600;white-space:nowrap;position:sticky;top:0;background:#F8FAFC;z-index:2;border-bottom:2px solid #E5E7EB}
+td{padding:10px 8px;border-bottom:1px solid #E5E7EB}
+tr:hover{background:#EFF6FF}
+.badge{font-size:9px;padding:2px 8px;border-radius:2px;white-space:nowrap;letter-spacing:.8px;display:inline-block}
+.status-badge{font-size:9px;padding:2px 8px;border-radius:2px;white-space:nowrap}
+.filter-bar{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:9px;letter-spacing:2px;color:#64748B;margin-right:4px}
+.fbtn{font-family:'Inter',sans-serif;font-size:10px;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid #E5E7EB;background:#FFFFFF;color:#64748B;transition:all .2s}
+.fbtn.active{border-color:#117ACA;background:#EFF6FF;color:#117ACA;font-weight:600}
+.fbtn:hover{border-color:#117ACA;color:#117ACA}
+.rbtn{font-family:'Inter',sans-serif;font-size:11px;padding:8px 14px;border-radius:3px;cursor:pointer;border:1px solid #E5E7EB;background:#FFFFFF;color:#64748B;transition:all .2s}
+.rbtn.active{border-color:#117ACA;background:#EFF6FF;color:#117ACA;font-weight:600}
+.rbtn:hover{border-color:#117ACA;color:#117ACA}
+.cat-hdr{font-size:10px;letter-spacing:2px;color:#117ACA;margin-bottom:8px;padding:5px 0;border-bottom:2px solid rgba(17,122,202,.2);font-weight:600}
+.hw-table{min-width:1100px}
+.hw-table td.news-cell{font-size:10px;color:#334155;max-width:320px;line-height:1.6;padding:10px;background:#EFF6FF;border-left:1px solid rgba(17,122,202,.15)}
+.hw-table td.news-cell a.news-src{color:#117ACA;text-decoration:none;font-weight:600;border-bottom:1px dotted rgba(17,122,202,.3);transition:color .2s}
+.hw-table td.news-cell a.news-src:hover{color:#002E63}
+.hw-table td.model-cell{color:#117ACA;font-size:11px;font-weight:600}
+.hw-table td.vendor-cell{font-weight:700;color:#002147;white-space:nowrap}
+.hw-table td.type-cell{color:#64748B;font-size:11px}
+.hw-table td.mono-cell{font-size:10px;color:#64748B}
+.hw-table td.cool-cell{font-size:11px;color:#334155}
+.hw-table td.note-cell{font-size:11px;color:#334155;max-width:200px}
+.hw-table th.news-th{min-width:280px}
+.reg-cards{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.reg-card{padding:10px 18px;background:#FFFFFF;border-radius:6px;border-left:3px solid var(--rc);flex:1 1 200px;box-shadow:0 1px 3px rgba(0,33,71,.06)}
+.reg-card-label{font-size:9px;letter-spacing:1.5px;color:#64748B;margin-bottom:3px}
+.reg-card-value{font-size:17px;color:var(--rc);font-weight:700}
+.reg-table{min-width:650px}
+.reg-table td.rank-cell{font-size:15px;color:rgba(17,122,202,.35);font-weight:700;width:36px;text-align:center}
+.reg-table td.hl-cell{color:#1E3A5F;line-height:1.5}
+.mkt-table td.idx-cell{font-size:10px;color:rgba(17,122,202,.3);width:30px}
+.mkt-table td.metric-cell{color:#1E3A5F}
+.mkt-table td.val-cell{font-size:14px;font-weight:700;color:#117ACA}
+.mkt-table td.ctx-cell{font-size:11px;color:#64748B}
+.mkt-table td.src-cell{font-size:11px}
+.src-link{color:#117ACA;text-decoration:none;border-bottom:1px dotted rgba(17,122,202,.4);transition:color .2s}
+.src-link:hover{color:#002E63}
+.sources-box{margin-top:24px;padding:14px 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;box-shadow:0 1px 3px rgba(0,33,71,.06)}
+.sources-title{font-size:9px;letter-spacing:2px;color:#117ACA;margin-bottom:6px;font-weight:600}
+.src-badges{display:flex;flex-wrap:wrap;gap:6px}
+.src-badge{font-size:9px;padding:3px 10px;border-radius:2px;background:#EFF6FF;border:1px solid rgba(17,122,202,.15);color:#117ACA;text-decoration:none;transition:all .2s;white-space:nowrap}
+.src-badge:hover{background:rgba(17,122,202,.12);color:#002E63}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid #E5E7EB;text-align:center}
+footer div{font-size:9px;letter-spacing:2px;color:#64748B;line-height:2}
+.wa-table{font-size:13px}
+.wa-table td.wa-idx{font-size:11px;color:rgba(17,122,202,.5);width:30px;font-weight:600}
+.wa-table td.wa-item{color:#1E3A5F}
+.wa-table td.wa-time{font-size:10px;color:#64748B}
+::-webkit-scrollbar{height:4px;width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,33,71,.12);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="tag">AZRAQ INTELLIGENCE</div>
+      <h1>DC Hardware <span>Weekly Report</span></h1>
+    </div>
+    <div class="meta">
+      <div>WK-13/2026</div><div>March 24-30, 2026</div><div class="int">INTERNAL USE</div>
+    </div>
+  </header>
+  <nav id="tabs"></nav>
+  <div id="tab-overview" class="tab active"></div>
+  <div id="tab-hardware" class="tab"></div>
+  <div id="tab-regions" class="tab"></div>
+  <div id="tab-market" class="tab"></div>
+  <footer><div>AZRAQ INTELLIGENCE · DC HARDWARE WEEKLY REPORT · WK-13/2026 · azraq.ai</div></footer>
+</div>
+<script>
+const HARDWARE_CATEGORIES = [
+  {
+    category: "GPU / AI Accelerators",
+    items: [
+      { vendor: "NVIDIA", model: "Vera Rubin NVL72", type: "GPU Rack System", status: "Shipping Samples", power: "~120 kW/rack", cooling: "Liquid (DLC)", price: "N/A (rack-scale)", note: "First hyperscale deployment on Azure; 7-chip full-stack platform", news: "[U.S. Commerce Dept] Export controls bar Vera Rubin from China; 22× performance gap vs permitted chips. [Reuters] NVIDIA halts H200 China production, reallocates TSMC capacity to Rubin. [NVIDIA GTC 2026] $1T order pipeline through 2027 confirmed by CEO Huang." },
+      { vendor: "NVIDIA", model: "Groq 3 LPU", type: "Language Processing Unit", status: "H2 2026", power: "TBD", cooling: "Liquid (LPX rack)", price: "N/A", note: "128 LPUs per LPX rack; 128GB on-chip SRAM; 640 TBps scale-up", news: "[NVIDIA/Groq] $20B acquisition closed Dec 2025; first LPU product from deal. [CNBC] Wall Street cautious on first-of-its-kind chip category; adoption unproven. [GTC 2026] 35× throughput/MW improvement when paired with Vera Rubin NVL72." },
+      { vendor: "NVIDIA", model: "Blackwell B300 (HGX)", type: "GPU Accelerator", status: "Shipping", power: "~1,200W TDP", cooling: "Liquid required", price: "$430K-$550K (8-GPU)", note: "Dominant AI training GPU; NVLink interconnect", news: "[U.S. Export Controls] Case-by-case review for China sales (eff. Jan 15 2026); 25% tariff on covered chips. [IDC] Server market grew 61% driven by Blackwell demand. [ASHRAE TC 9.9] New H1 envelope mandates ≤25°C supply air for high-density GPU systems." },
+      { vendor: "NVIDIA", model: "RTX PRO 6000 BSE", type: "Inference GPU", status: "Available", power: "300W", cooling: "Air", price: "~$6,800", note: "100x over CPU-only for vision AI; single-slot", news: "[NVIDIA GTC 2026] Positioned for sovereign AI deployments and geospatial intelligence. [Azure Local] Now supports RTX PRO 6000 BSE for on-prem sovereign AI in regulated industries." },
+      { vendor: "NVIDIA", model: "RTX PRO 4500 BSE", type: "Inference GPU", status: "Coming Soon", power: "165W", cooling: "Air", price: "TBD", note: "Compact inference; announced at GTC 2026", news: "[NVIDIA GTC 2026] Unveiled for edge inference at 165W; Azure Local support expected. [Deloitte 2026 Outlook] Hybrid inference at edge cited as key enterprise trend." },
+      { vendor: "AMD", model: "Instinct MI325X", type: "GPU Accelerator", status: "Available", power: "~750W TDP", cooling: "Air / Liquid", price: "~$20K-$25K", note: "Adopted by Dell, HPE, Supermicro, Lenovo", news: "[U.S. Export Controls] MI325X subject to same case-by-case China review as H200. [AMD Advancing AI] 4 OEMs launched MI325X servers simultaneously. [650 Group] AMD gaining traction in price-sensitive AI deployments." },
+      { vendor: "Huawei", model: "Ascend 910C", type: "AI Accelerator", status: "Shipping (China)", power: "~310W TDP", cooling: "Air / Liquid", price: "N/A (domestic)", note: "China's top AI chip; CANN/Ascend stack; Baidu, Alibaba, Tencent adoption", news: "[U.S. Export Controls] Not available outside China; drives bifurcated AI ecosystem. [Ken Research] Huawei leads Chinese DC server market alongside Inspur. [Kavout] Dual-stack AI ecosystem (CUDA vs CANN) solidifying by 2027." },
+      { vendor: "Intel", model: "Gaudi 3", type: "AI Accelerator", status: "Available", power: "~600W TDP", cooling: "Air / Liquid", price: "~$15K-$18K", note: "Price-sensitive niche; BF16 inference focus", news: "[Kavout] Gaudi 3 finds niche in price-sensitive deployments where NVIDIA is cost-prohibitive. [Intel] Positioned as lower-cost alternative for inference-heavy workloads." },
+      { vendor: "Cambricon", model: "MLU370-X8", type: "AI Accelerator", status: "Shipping (China)", power: "~250W", cooling: "Air", price: "N/A (domestic)", note: "Chinese AI chip for inference; state-backed adoption", news: "[Ken Research] Cambricon listed among key Chinese DC server market participants. [China Five-Year Plan] State-backed AI chip development accelerating domestic alternatives." },
+    ]
+  },
+  {
+    category: "Server Platforms",
+    items: [
+      { vendor: "Dell", model: "PowerEdge XE9812", type: "Vera Rubin NVL72", status: "H2 2026", power: "Rack-scale", cooling: "Liquid", price: "Enterprise", note: "Dell's Vera Rubin for training + inference", news: "[Dell GTC 2026] Enterprise Inferencing Foundation also launched for 1-2 node validated entry. [Data Center Knowledge] Vendors differentiating above silicon with orchestration + storage layers." },
+      { vendor: "Dell", model: "PowerEdge XE9680", type: "8-GPU AI Server", status: "Shipping", power: "~16 kW", cooling: "Liquid recommended", price: "$340K-$500K", note: "Flagship AI; HGX B200/B300 support", news: "[Principled Technologies] Dell iDRAC9 delivers 3.5× more security features vs Supermicro IPMI. [The Brand Hopper] XE9680 winning enterprise deals on financing + bundled storage." },
+      { vendor: "Dell", model: "PowerEdge R9822 / M9822", type: "Vera CPU Server", status: "Sep 2026", power: "TBD", cooling: "Air / Liquid", price: "TBD", note: "NVIDIA Vera CPU-based compute", news: "[NVIDIA GTC 2026] Vera CPU positions NVIDIA against Intel/AMD in DC CPU market. [Data Center Knowledge] Dell plans Sep 2026 availability, ahead of HPE's 2027 Vera CPU blade." },
+      { vendor: "Dell", model: "PowerEdge XE7745", type: "AMD GPU Server", status: "Available", power: "~14 kW", cooling: "Air (4U)", price: "Enterprise", note: "Up to 8 double-width or 16 single-width GPUs", news: "[AMD] 5th Gen EPYC 'Turin' processors support up to 192 cores at 500W TDP. [Dell] DC-MHS chassis design enhances air cooling for dual 500W CPUs." },
+      { vendor: "HPE", model: "Cray XD670", type: "HGX B300 Server", status: "Shipping", power: "~15 kW", cooling: "DLC", price: "Enterprise", note: "Lowest 5-yr TCO (~$2.31M)", news: "[Slyd Analysis] Lowest 5-yr TCO among major OEMs due to superior DLC efficiency. [HPE GTC 2026] AI Grid launched combining Juniper networking + ProLiant for distributed inference." },
+      { vendor: "HPE", model: "Cray GX240", type: "Vera CPU Blade", status: "2027", power: "TBD", cooling: "Liquid", price: "TBD", note: "First HPE Vera CPU server", news: "[HPE GTC 2026] Vera Rubin NVL72 rack available Dec 2026; Vera CPU blade in 2027. [IDC] HPE ranks 5th in server market share (3%) despite Cray heritage." },
+      { vendor: "HPE", model: "ProLiant XD685", type: "8×MI325X Server", status: "Available", power: "~14 kW", cooling: "Air / DLC", price: "Enterprise", note: "Modular 5U; 8-node/rack density", news: "[HPE] Modular 5U chassis maximizes rack density for 8-way GPU systems. [AMD Advancing AI] Jointly launched with MI325X for AI model builder market." },
+      { vendor: "Supermicro", model: "SYS-821GB-TNRX", type: "HGX B300 / GB300", status: "Shipping", power: "~16 kW", cooling: "DLC-2 (98% heat)", price: "10-15% below Dell", note: "2-4 week lead; 96 GPUs per 52U", news: "[SEC/DOJ] Governance investigations ongoing; BDO issued adverse opinion on internal controls. [Slyd] Fastest OEM lead time (2,4 wks); 70% liquid cooling market share." },
+      { vendor: "Supermicro", model: "H14 Product Line", type: "EPYC 9005 Servers", status: "Available", power: "Up to 500W/CPU", cooling: "Air / Liquid", price: "Competitive", note: "7 variants; up to 192 cores, 10 GPUs", news: "[Supermicro] JumpStart early access program live. [The Brand Hopper] Supermicro at crossroads: must solve governance trust to maintain 'AI Leader' position." },
+      { vendor: "Lenovo", model: "ThinkSystem SR675i", type: "AI Inference Server", status: "Available", power: "TBD", cooling: "Neptune", price: "TruScale", note: "CES 2026; manufacturing, healthcare", news: "[CES 2026] 3 purpose-built inference servers launched. [Lenovo/NVIDIA] GW-scale AI factory program with GB300 NVL72 to cut deployment from months to weeks." },
+      { vendor: "Lenovo", model: "ThinkEdge SE455i", type: "Edge AI Server", status: "Available", power: "Low", cooling: "Air", price: "TruScale", note: "Ultra-compact edge deployment", news: "[Deloitte 2026] Edge AI drives demand for compact servers with NPU integration. [ASHRAE TC 9.9] Edge Computing bulletin highlights environmental and reliability challenges." },
+      { vendor: "Cisco", model: "Secure AI Factory", type: "Reference Arch", status: "Available", power: "Varies", cooling: "Varies", price: "Custom", note: "UCS + Nexus + AI Defense + NVIDIA GPUs", news: "[Cisco] Validated reference architecture with security at data-level (AI Defense + Splunk). [IntuitionLabs] Cisco verticalizing AI stack to compete with Dell/HPE/Supermicro." },
+      { vendor: "Quanta / QCT", model: "QuantaGrid S74G-2U", type: "OCP AI Server", status: "Shipping", power: "~14 kW", cooling: "Air / DLC", price: "ODM direct", note: "OCP-compliant; 30-60 day lead; hyperscaler-preferred", news: "[DigiTimes] Quanta overtook Pegatron as #2 EMS/ODM on AI server surge. [OCP] Open Rack V3 spec standardizes 48V distribution; Quanta is key contributor. [Mordor Intelligence] ODMs ship pre-certified systems in 30-60 days, halving OEM validation times." },
+      { vendor: "Foxconn / Hon Hai", model: "GB200 NVL72 Rack", type: "ODM AI Rack", status: "Shipping", power: "Rack-scale", cooling: "Liquid", price: "ODM direct", note: "World's largest EMS; NVIDIA GB200 rack builder", news: "[DigiTimes] Foxconn remains world's largest EMS/ODM provider. [GlobalSMT] Deep integration with NVIDIA data center roadmap drives AI revenue. [OCP] 60% of worldwide OCP server output from Taiwan ODMs including Foxconn." },
+      { vendor: "Inventec", model: "AI Server Platform", type: "ODM GPU Server", status: "Shipping", power: "~12 kW", cooling: "Air / Liquid", price: "ODM direct", note: "OCP member; hyperscale cloud focus", news: "[ResearchAndMarkets] Inventec listed among key ODM server manufacturers alongside Quanta and Wiwynn. [DigiTimes] Taiwan ODMs collectively generate 60% of worldwide OCP server output." },
+      { vendor: "Inspur", model: "NF5688M7", type: "8-GPU AI Server", status: "Shipping", power: "~15 kW", cooling: "Multi-fluid cooling", price: "Competitive", note: "#1 server vendor for China public cloud; JDM model", news: "[IDC/TAdviser] Inspur holds #1 position in server sales to public cloud providers globally. [The Brand Hopper] Multi-fluid cooling (air + cold plate + immersion) appeals to Tier-2 cloud. [U.S. Entity List] Subject to U.S. export restrictions; limited to domestic market." },
+      { vendor: "Gigabyte / Giga Computing", model: "G593-ZD2 / SP5 Platform", type: "GPU/EPYC Server", status: "Available", power: "~12 kW", cooling: "Air / Liquid", price: "Value tier", note: "Fast arch pivot; 60+ servers updated for EPYC 9005", news: "[AMD Advancing AI] Giga Computing launched new server + BIOS updates for 60+ SP5 platform products. [The Brand Hopper] Gigabyte winning on value; faster pivot to new chip architectures than larger OEMs." },
+      { vendor: "Wistron", model: "GB200 NVL72 Rack", type: "ODM AI Rack", status: "Shipping", power: "Rack-scale", cooling: "Liquid", price: "ODM direct", note: "Surged to #3 EMS/ODM on GB200 deliveries", news: "[DigiTimes] Wistron surged to #3 EMS/ODM; briefly overtook Quanta in May,Jun on early GB200 rack deliveries. [GlobalSMT] Taiwan's AI server supply chain reshaping global EMS hierarchy." },
+      { vendor: "Huawei", model: "FusionServer Pro 2488H V7", type: "4-Socket AI Server", status: "Shipping", power: "~10 kW", cooling: "Air", price: "Domestic pricing", note: "Kunpeng ARM + Ascend NPU; Chinese sovereign cloud", news: "[Ken Research] Huawei leads Chinese DC server market with Inspur. [IDC] Huawei saw 9.5% storage growth in Q3 driven by Chinese market. [U.S. Entity List] Barred from accessing Western chips/tools." },
+      { vendor: "Fujitsu", model: "PRIMERGY RX2540 M7", type: "2U Rack Server", status: "Available", power: "~1.2 kW", cooling: "Air", price: "Mid-range", note: "Japan/EU focus; reliability + localized support", news: "[IntelMarketResearch] Fujitsu and NEC retain loyal customer bases in Japan and Europe emphasizing reliability. [ResearchAndMarkets] Fujitsu listed among top-12 global AI server competitive landscape." },
+      { vendor: "IBM", model: "Power S1024 / LinuxONE", type: "Mission-Critical Server", status: "Available", power: "Varies", cooling: "Air", price: "Premium", note: "Hybrid cloud + AI; Power Systems for enterprise", news: "[TAdviser] IBM maintains strong positions in mission-critical and hybrid cloud environments. [IBM] Power Systems and LinuxONE serve regulated industries (banking, healthcare)." },
+      { vendor: "ASUS / ASUSTeK", model: "ESC8000A-E12 (2U)", type: "8-GPU AI Server", status: "Available", power: "~12 kW", cooling: "Air / Liquid", price: "Competitive", note: "Consumer brand expanding into enterprise AI", news: "[ResearchAndMarkets] ASUSTeK listed in AI Computing Power Server competitive landscape 2026-2032. [ASUS] Enterprise server division growing on GPU-optimized platforms." },
+    ]
+  },
+  {
+    category: "Networking & Interconnect",
+    items: [
+      { vendor: "NVIDIA", model: "Spectrum-6 SPX", type: "Networking Rack", status: "Announced", power: "Rack-scale", cooling: "Liquid", price: "N/A", note: "AI factory networking rack (GTC 2026)", news: "[NVIDIA Tech Blog] Spectrum-X Ethernet co-designed with Vera Rubin; lossless behavior under sustained AI load. [GTC 2026] Part of DSX 'AI Factory blueprints' platform." },
+      { vendor: "NVIDIA", model: "BlueField-4 STX", type: "Storage / DPU Rack", status: "Announced", power: "Rack-scale", cooling: "Liquid", price: "N/A", note: "New storage arch; DPU-accelerated", news: "[NVIDIA GTC 2026] New storage rack architecture improves performance vs traditional setups. [Yahoo Finance] Part of 5-rack system portfolio unveiled at GTC." },
+      { vendor: "NVIDIA", model: "NVLink 6 Switch", type: "GPU Interconnect", status: "H2 2026", power: "Integrated", cooling: "Liquid", price: "Bundled", note: "Part of Vera Rubin platform", news: "[NVIDIA] Successor to NVLink 5; integrated into Vera Rubin NVL72 rack. [DCD] 2028 roadmap includes NVLink 7 for Kyber NVL144 (4× Blackwell NVL72 performance)." },
+      { vendor: "NVIDIA", model: "ConnectX-8", type: "Network Adapter", status: "H2 2026", power: "Low", cooling: "Air", price: "TBD", note: "Next-gen SmartNIC for Vera Rubin", news: "[NVIDIA] Part of Vera Rubin platform's networking stack alongside Spectrum-6. [IEEE 802.3] 800GbE standard ratification supports next-gen DC interconnects." },
+      { vendor: "Arista/Broadcom", model: "800G Ethernet", type: "DC Switching", status: "Ramping", power: "Varies", cooling: "Air/Liquid", price: "Varies", note: "AI cluster backbone; east-west traffic", news: "[IEEE 802.3df] 800GbE standard published. [Lawrence Berkeley Lab] 200/400Gb ports growing from 6% to 26% of network energy share by 2028." },
+      { vendor: "Juniper / HPE", model: "QFX5240 / AI Grid", type: "400G DC Spine", status: "Available", power: "Varies", cooling: "Air", price: "Enterprise", note: "HPE AI Grid combines Juniper networking + ProLiant", news: "[HPE GTC 2026] AI Grid launched to connect AI factories and distributed inference across regional + edge sites. [HPE/Juniper] Acquisition completed; unified networking portfolio for DC." },
+      { vendor: "Huawei", model: "CloudEngine 16800", type: "400G DC Switch", status: "Shipping", power: "Varies", cooling: "Air", price: "Domestic pricing", note: "China's leading DC switch; AI fabric-ready", news: "[Huawei] CloudEngine series deployed across Chinese hyperscaler data centers. [U.S. Entity List] Restricted from Western markets; dominates Chinese DC networking." },
+      { vendor: "ZTE", model: "ZXR10 M6000-S", type: "DC Core Router", status: "Available", power: "Varies", cooling: "Air", price: "Mid-range", note: "Chinese market; carrier-grade DC routing", news: "[Ken Research] ZTE listed among key Chinese DC infrastructure participants. [DCD MENA 2026] ZTE expanding DC networking presence in Middle East markets." },
+      { vendor: "Celestica", model: "DS4000 Series", type: "OCP Network Switch", status: "Shipping", power: "Varies", cooling: "Air", price: "ODM direct", note: "OCP-compliant; white-box switching for hyperscale", news: "[DigiTimes] Celestica achieved sequential revenue growth riding AI server tailwind. [OCP] White-box networking gaining share as hyperscalers avoid vendor lock-in." },
+    ]
+  },
+  {
+    category: "Cooling & Thermal",
+    items: [
+      { vendor: "Vertiv", model: "CoolChip CDU", type: "Coolant Distribution", status: "Available", power: "70,1,350 kW", cooling: "DTC / RDHx", price: "Varies", note: "In-rack, in-row, perimeter options", news: "[ASHRAE TC 9.9] Feb 2026 bulletin: chip power in 'uncharted territory'; CDU recommended as FWS/TCS demarcation. [ASHRAE 90.4] MLC thresholds encourage high-efficiency cooling systems." },
+      { vendor: "Vertiv", model: "MegaMod HDX", type: "Prefab Cooling", status: "Available", power: "High-density", cooling: "DLC + Air hybrid", price: "Custom", note: "Modular; NA & EMEA; factory-tested", news: "[Vertiv Jan 2026] Launched for NA + EMEA; integrates Liebert APM2 UPS + CoolChip CDU + PowerBar busway. [NFPA 75] Fire safety standards mandate early warning in prefab modules." },
+      { vendor: "Vertiv", model: "XDU Series", type: "Extreme Density", status: "Available", power: "200+ kW/rack", cooling: "Liquid", price: "Custom", note: "CoreWeave deploys; GB200 NVL72", news: "[Introl] CoreWeave demonstrates 250 kW/rack with XDU for GB200 NVL72. [ZutaCore] Vertiv partnership enables two-phase liquid cooling at 900W per GPU." },
+      { vendor: "Schneider", model: "EcoStruxure Cooling", type: "Cooling Software", status: "Available", power: "N/A", cooling: "Smart optimization", price: "Subscription", note: "Selected by Microsoft Azure AI", news: "[Microsoft] Selected for Azure AI infrastructure; 15% better efficiency than competitors. [EU Ecodesign 2019/424] Under review; ASHRAE TC 9.9 submitted response on server cooling standards." },
+      { vendor: "Schneider/Motivair", model: "ChilledDoor3 RDHx", type: "Rear-Door HX", status: "Available", power: "75 kW/rack", cooling: "Rear-door liquid", price: "Varies", note: "Post-acquisition; hybrid retrofit", news: "[Schneider] Motivair acquisition expands AI cooling portfolio. [DCD Dec 2025] Liquid cooling market at $5.52B → $15.75B by 2030; DTC commands 47% share." },
+      { vendor: "CoolIT Systems", model: "DLC Platform", type: "Direct Liquid", status: "Available", power: "Varies", cooling: "Cold plate + immersion", price: "Varies", note: "Eaton partnership", news: "[Eaton/CoolIT] Joint DLC platform for cold plate + immersion deployments. [Grand View Research] NA holds 35.6% of global liquid cooling market (2025)." },
+      { vendor: "Wiwynn", model: "Two-Phase Immersion", type: "Full Immersion", status: "Deploying", power: "Ultra-high", cooling: "Immersion", price: "Custom", note: "OCP-aligned; hyperscaler-preferred", news: "[OCP Foundation] Open Rack V3 spec supports immersion-ready designs. [The Brand Hopper] Wiwynn leads bleeding-edge thermal management for hyperscale." },
+      { vendor: "Asetek", model: "AI Cooling Suite", type: "DLC / CDU", status: "Available", power: "Varies", cooling: "Direct-to-chip", price: "Varies", note: "Established DLC pioneer", news: "[ASHRAE TC 9.9] New liquid cooling thermal template expected in Datacom Encyclopedia update. [Grand View Research] Asetek profiled as key DLC player in $15.75B market." },
+      { vendor: "Rittal", model: "LCP DX / Blue e+", type: "Precision Cooling", status: "Available", power: "Up to 60 kW/rack", cooling: "Air / Hybrid", price: "Mid-range", note: "European market leader; modular enclosures", news: "[Grand View Research] Rittal listed as major player in DC liquid cooling market. [EU Ecodesign] European regulations driving demand for high-efficiency precision cooling." },
+      { vendor: "STULZ", model: "CyberAir 3PRO DX", type: "Precision Air Cooling", status: "Available", power: "Up to 200 kW", cooling: "Air (variable speed)", price: "Mid-range", note: "German engineering; 50+ years DC cooling", news: "[Blackridge Research] STULZ ranked among top 10 DC cooling companies globally. [ASHRAE 90.4] MLC thresholds encourage variable-speed precision cooling systems." },
+      { vendor: "Delta Electronics", model: "InfraSuite", type: "Precision Cooling + CDU", status: "Available", power: "Varies", cooling: "Air / Liquid", price: "Mid-range", note: "Taiwan; integrated DC infra (power + cooling + mgmt)", news: "[Grand View Research] Delta Electronics listed among major DC liquid cooling market players. [OCP] InfraSuite supports Open Rack V3 deployments." },
+      { vendor: "Green Revolution Cooling", model: "ICEraQ Series", type: "Single-Phase Immersion", status: "Available", power: "100+ kW/rack", cooling: "Immersion", price: "Custom", note: "US-based immersion cooling specialist", news: "[Blackridge Research] GRC among top specialized immersion cooling providers. [ASHRAE TC 9.9] Immersion cooling gaining industry acceptance for extreme density." },
+      { vendor: "LiquidStack", model: "DataTank", type: "Two-Phase Immersion", status: "Available", power: "Ultra-high", cooling: "Full immersion", price: "Custom", note: "Formerly Allied Control; precision immersion", news: "[Grand View Research] LiquidStack profiled as key immersion cooling vendor. [LiquidStack Nov 2025] Expanded partnerships for 2-phase immersion at hyperscale." },
+      { vendor: "Submer", model: "SmartPod XL", type: "Immersion Cooling Pod", status: "Available", power: "Up to 250 kW", cooling: "Single-phase immersion", price: "Custom", note: "Spanish startup; containerized immersion pods", news: "[Grand View Research] Submer Technologies listed among emerging DC liquid cooling players. [EU Data Center Regulations] Immersion cooling gaining traction as EU tightens PUE disclosure requirements." },
+    ]
+  },
+  {
+    category: "Storage & Data",
+    items: [
+      { vendor: "NetApp", model: "AI Data Engine (AIDE)", type: "AI Data Software", status: "Announced", power: "N/A", cooling: "N/A", price: "Software", note: "NVIDIA co-engineered; metadata indexing", news: "[NVIDIA GTC 2026] Co-engineered with NVIDIA; builds intelligent index across on-prem, cloud, and edge. [Data Center Knowledge] Storage vendors converging on 'active intelligent' data layer." },
+      { vendor: "Everpure", model: "FlashBlade//EXA", type: "AI Storage", status: "Available", power: "Varies", cooling: "Air", price: "STaaS", note: "Highest-end AI storage; Evergreen//One", news: "[Pure Storage] Rebranded to Everpure; STaaS model extended to highest-end AI platform. [IDC] Double-digit storage growth driven by AI + neocloud projects." },
+      { vendor: "Everpure", model: "Data Stream", type: "Auto Data Pipeline", status: "Beta H2 2026", power: "N/A", cooling: "N/A", price: "TBD", note: "Continuous GPU feed; no manual mgmt", news: "[Everpure GTC 2026] Beta targets persistent pain point: manual GPU data pipeline management. [Data Center Knowledge] Compared to VAST Data Engine for automated feeding." },
+      { vendor: "VAST Data", model: "AI Blueprint Pipelines", type: "Open-Source", status: "Available", power: "N/A", cooling: "N/A", price: "Free / OSS", note: "Pre-built NVIDIA AI Blueprint implementations", news: "[VAST Data GTC 2026] Open-source approach lowers barrier for NVIDIA AI Blueprint adoption. [Data Center Knowledge] Storage becoming 'active participant' in AI pipelines, not passive repository." },
+      { vendor: "DDN (DataDirect)", model: "AI400X2 / EXAScaler", type: "AI Parallel Storage", status: "Available", power: "Varies", cooling: "Air", price: "Enterprise", note: "HPC/AI parallel file system; Lustre-based", news: "[GlobeNewsWire] DDN listed among key hyperscale DC IT infrastructure providers. [DDN] EXAScaler deployed at national labs and AI research institutions." },
+      { vendor: "Hitachi Vantara", model: "VSP One Block", type: "Enterprise Storage", status: "Available", power: "Varies", cooling: "Air", price: "Premium", note: "Mission-critical; hybrid cloud data services", news: "[GlobeNewsWire] Hitachi Vantara listed among key hyperscale DC infrastructure providers. [Hitachi] VSP platform targets regulated industries requiring data sovereignty." },
+      { vendor: "Infinidat", model: "InfiniBox SSA II", type: "Enterprise SAN", status: "Available", power: "Varies", cooling: "Air", price: "Enterprise", note: "Petabyte-scale; 100% availability guarantee", news: "[Infinidat] Positioned for large-scale AI data lake workloads. [IDC] Enterprise storage market diversifying beyond Pure/NetApp duopoly." },
+      { vendor: "Nimbus Data", model: "ExaDrive DC", type: "100TB+ SSD", status: "Available", power: "Low per TB", cooling: "N/A", price: "$/TB leader", note: "World's largest SSD; extreme density per U", news: "[GlobeNewsWire] Nimbus Data listed among advanced DC storage infrastructure providers. [Nimbus] ExaDrive reduces physical footprint for cold/warm AI data tiers." },
+    ]
+  },
+  {
+    category: "Power & UPS",
+    items: [
+      { vendor: "Vertiv", model: "Liebert APM2", type: "Modular UPS", status: "Available", power: "Scalable", cooling: "Integrated", price: "Varies", note: "Part of MegaMod HDX; hot-swap", news: "[Vertiv] Integrated into MegaMod HDX prefab solution for rapid deployment. [Uptime Institute] Modular UPS architectures increasingly preferred for AI facility scalability." },
+      { vendor: "Schneider", model: "Galaxy VX / VL", type: "3-Phase UPS", status: "Available", power: "Up to 1,500 kW", cooling: "Integrated", price: "Enterprise", note: "Standard for Tier III/IV", news: "[Uptime Institute] Tier IV redundancy remains preferred for multi-week AI model training runs. [NFPA 110] Emergency power supply standards govern UPS + generator integration." },
+      { vendor: "Eaton", model: "9395P UPS", type: "UPS System", status: "Available", power: "Up to 1,200 kW", cooling: "Integrated", price: "Enterprise", note: "High-efficiency; paralleling", news: "[IEEE 446] Recommended Practice for Emergency & Standby Power governs DC UPS design. [Eaton] Paralleling capability supports N+1 redundancy at scale." },
+      { vendor: "Baker Hughes", model: "Gas Turbine Portfolio", type: "On-Site Power", status: "Orders 2×", power: "Multi-MW", cooling: "N/A", price: "$3B order target", note: "Behind-the-meter DC prime power", news: "[Landgate] Baker Hughes doubles DC equipment order target to $3B; power-gen bottleneck shifting from chips. [White House Mar 2026] Ratepayer Protection Pledge to shield households from DC power costs." },
+      { vendor: "Cummins", model: "QSK95 / HSK78G", type: "Backup Generator", status: "Available", power: "Up to 3.5 MW", cooling: "N/A", price: "Enterprise", note: "Diesel + gas generator sets for DC backup", news: "[GlobeNewsWire] Cummins listed among key DC support infrastructure providers. [NFPA 110] Emergency power standards govern generator sizing and response time." },
+      { vendor: "Caterpillar", model: "Cat C175-20 / MG Series", type: "Prime Power Generator", status: "Available", power: "Up to 6 MW", cooling: "N/A", price: "Custom", note: "Prime + standby power for large-scale DCs", news: "[GlobeNewsWire] Caterpillar listed among key hyperscale DC mechanical infrastructure providers. [Landgate] Gas turbines and generators critical as grid interconnect waits exceed 4 years." },
+      { vendor: "ABB", model: "MegaFlex / DPA UPScale", type: "Modular UPS", status: "Available", power: "Up to 6 MW", cooling: "Integrated", price: "Enterprise", note: "Modular scalability; global DC footprint", news: "[GlobeNewsWire] ABB listed among key DC support infrastructure providers globally. [ABB] MegaFlex modular architecture supports pay-as-you-grow DC expansion." },
+      { vendor: "Delta Electronics", model: "Ultron HPH / DPH", type: "3-Phase UPS", status: "Available", power: "Up to 1.2 MW", cooling: "Integrated", price: "Mid-range", note: "Taiwan; cost-effective UPS for Tier II/III", news: "[Delta] Integrated power + cooling + management platform for mid-tier DCs. [GlobeNewsWire] Cyber Power Systems and Delta growing in DC UPS segment." },
+      { vendor: "Bloom Energy", model: "Energy Server (SOFC)", type: "Fuel Cell / Prime Power", status: "Deploying", power: "200 kW modules", cooling: "N/A", price: "PPA / Custom", note: "Solid oxide fuel cell; behind-the-meter DC power", news: "[Data Center World] Fuel cells gaining traction as DC prime power alternative to gas turbines. [Bloom Energy] Deployed at CoreWeave, Equinix facilities for always-on clean power." },
+      { vendor: "Kohler / SDMO", model: "KD Series Generators", type: "Standby Generator", status: "Available", power: "Up to 4 MW", cooling: "N/A", price: "Enterprise", note: "Diesel standby; rapid start for DC backup", news: "[GlobeNewsWire] Kohler/SDMO listed among key DC support infrastructure providers. [NFPA 110] Level 1 emergency power within 10 seconds required for Tier III/IV facilities." },
+    ]
+  }
+];
+
+const REGIONS = [
+  {
+    region: "North America", flag: "🌎", size: "$120B+ (2026 est.)", sizeUrl: "https://brightlio.com/data-center-stats/", metric: "2.6% colo vacancy (ATL)", metricUrl: "https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026",
+    items: [
+      { rank: 1, headline: "NVIDIA GTC 2026: $1T order pipeline; Vera Rubin, Groq 3 LPU, 5 new rack systems", impact: "Critical", cat: "Compute", url: "https://blogs.nvidia.com/blog/gtc-2026-news/" },
+      { rank: 2, headline: "DRAM prices surge 95%; 70% of global memory production consumed by data centers", impact: "Critical", cat: "Supply Chain", url: "https://news.broadcom.com/cloud/2026-hardware-crisis-modern-private-cloud-adoption" },
+      { rank: 3, headline: "Top 5 hyperscalers projected to spend $602B combined CapEx in 2026", impact: "High", cat: "Investment", url: "https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026" },
+      { rank: 4, headline: "CoreWeave deploys Vertiv XDU at 250 kW/rack for NVIDIA GB200 NVL72 clusters", impact: "High", cat: "Cooling", url: "https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers" },
+      { rank: 5, headline: "Dell PowerEdge XE9812 (Vera Rubin) + R9822 (Vera CPU) slated for H2 / Sep 2026", impact: "High", cat: "Compute", url: "https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026" },
+      { rank: 6, headline: "Sightline Climate: 30-50% of 2026 pipeline may not materialize on schedule", impact: "High", cat: "Construction", url: "https://www.sightlineclimate.com/research/data-center-outlook" },
+      { rank: 7, headline: "Texas enacts stricter regulations on data center power consumption", impact: "Moderate", cat: "Regulation", url: "https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026" },
+      { rank: 8, headline: "Aurora, IL issues 6-month moratorium on new DC approvals; zoning rewrite", impact: "Moderate", cat: "Regulation", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 9, headline: "Broadcom VCF 9.0: NVMe memory tiering cuts server TCO by 42%", impact: "Moderate", cat: "Software", url: "https://news.broadcom.com/cloud/2026-hardware-crisis-modern-private-cloud-adoption" },
+      { rank: 10, headline: "Vantage $15B Lighthouse campus, Port Washington, WI , megaproject advances", impact: "Moderate", cat: "Construction", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+    ]
+  },
+  {
+    region: "Europe", flag: "🇪🇺", size: "€176B (2026-2031 cumulative)", sizeUrl: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook", metric: "Grid readiness = top constraint", metricUrl: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook",
+    items: [
+      { rank: 1, headline: "Equinix + CPPIB acquire atNorth (Iceland) for $4B with $4.2B financing", impact: "Critical", cat: "M&A", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 2, headline: "EDCA: €176B cumulative DC investment 2026-2031; grid is binding constraint", impact: "High", cat: "Market", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+      { rank: 3, headline: "atNorth: 300 MW mega site in Sweden + 30 MW expansion in Finland unveiled", impact: "High", cat: "Construction", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 4, headline: "EMEA renewables + private wire cutting tenant power costs by 40% vs grid", impact: "High", cat: "Energy", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+      { rank: 5, headline: "Ireland data centers to consume 32% of national electricity by 2026", impact: "High", cat: "Energy", url: "https://brightlio.com/data-center-stats/" },
+      { rank: 6, headline: "Vertiv MegaMod HDX modular liquid cooling now available in EMEA", impact: "Moderate", cat: "Cooling", url: "https://www.prnewswire.com/news-releases/vertiv-introduces-new-modular-liquid-cooling-infrastructure-solution-to-support-high-density-compute-requirements-in-north-america-and-emea-302661073.html" },
+      { rank: 7, headline: "France: data center moratorium debated; 'green data center' definition pending", impact: "Moderate", cat: "Regulation", url: "https://www.sightlineclimate.com/research/data-center-outlook" },
+      { rank: 8, headline: "Schneider Electric acquires Motivair; expands AI cooling for EU market", impact: "Moderate", cat: "Cooling", url: "https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers" },
+      { rank: 9, headline: "HPE Vera Rubin NVL72 rack available Dec 2026 for EU service providers", impact: "Moderate", cat: "Compute", url: "https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026" },
+      { rank: 10, headline: "Google $15B America-India Connect includes EU-linked subsea gateways", impact: "Watch", cat: "Connectivity", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+    ]
+  },
+  {
+    region: "Asia-Pacific", flag: "🌏", size: "$800B forecast investment", sizeUrl: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook", metric: "India: 950→1-800 MW by 2026", metricUrl: "https://brightlio.com/data-center-stats/",
+    items: [
+      { rank: 1, headline: "OpenAI + Samsung SDS + SK Telecom break ground on 20 MW DC in South Korea", impact: "High", cat: "Construction", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 2, headline: "Lenovo GW-scale AI factory program with NVIDIA GB300 + Neptune cooling", impact: "High", cat: "Compute", url: "https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026" },
+      { rank: 3, headline: "India DC capacity to double: 950 MW (2024) → 1-800 MW by 2026", impact: "High", cat: "Market", url: "https://brightlio.com/data-center-stats/" },
+      { rank: 4, headline: "Japanese retailers halt PC orders as DRAM shortage hits consumer channel", impact: "High", cat: "Supply Chain", url: "https://www.tomshardware.com/pc-components/ram/data-centers-will-consume-70-percent-of-memory-chips-made-in-2026-supply-shortfall-will-cause-the-chip-shortage-to-spread-to-other-segments" },
+      { rank: 5, headline: "NVIDIA Space-1 Vera Rubin orbital DC partners with Planet Labs (APAC)", impact: "Moderate", cat: "Innovation", url: "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer" },
+      { rank: 6, headline: "Supermicro H14 (EPYC 9005) available via JumpStart in Asia markets", impact: "Moderate", cat: "Compute", url: "https://thebrandhopper.com/brand/who-are-supermicros-top-competitors-in-technology-industry/" },
+      { rank: 7, headline: "China Five-Year Plan: clean energy + AI + industrial policy → DC buildout", impact: "Moderate", cat: "Policy", url: "https://www.sightlineclimate.com/research/data-center-outlook" },
+      { rank: 8, headline: "NVIDIA H200 sales restarting in China; export controls remain fluid", impact: "Moderate", cat: "Trade", url: "https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom" },
+      { rank: 9, headline: "Wiwynn leads two-phase immersion cooling for APAC hyperscale deploys", impact: "Moderate", cat: "Cooling", url: "https://www.mordorintelligence.com/industry-reports/ocp-servers-market" },
+      { rank: 10, headline: "Google America-India Connect: subsea infra positioning India as AI hub", impact: "Watch", cat: "Connectivity", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+    ]
+  },
+  {
+    region: "Middle East & Africa", flag: "🏜️", size: "$2.51B AI DC (2026); $100B+ total commitments", sizeUrl: "https://www.mordorintelligence.com/industry-reports/middle-east-and-africa-artificial-intelligence-ai-data-center-market", metric: "UAE: 376 MW+ live; #1 emerging market", metricUrl: "https://www.datacenterknowledge.com/build-design/uae-data-centers-powering-the-middle-east-s-ai-and-cloud-revolution",
+    items: [
+      { rank: 1, headline: "HUMAIN (Saudi): multi-GW AI-native platform with sovereign alignment", impact: "Critical", cat: "Construction", url: "https://www.globaldatacenterhub.com/p/middle-east-and-africa-100b-ai-and" },
+      { rank: 2, headline: "Microsoft + G42: 200 MW DC expansion in UAE, online by end of 2026", impact: "Critical", cat: "Hyperscale", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 3, headline: "Saudi DC pipeline: $21B domestic + $30B regional AI infrastructure deals", impact: "High", cat: "Investment", url: "https://www.globaldatacenterhub.com/p/middle-east-and-africa-100b-ai-and" },
+      { rank: 4, headline: "UAE live capacity surpassed 376 MW; Abu Dhabi #1 emerging DC market (Cushman)", impact: "High", cat: "Market", url: "https://www.datacenterknowledge.com/build-design/uae-data-centers-powering-the-middle-east-s-ai-and-cloud-revolution" },
+      { rank: 5, headline: "Abu Dhabi TII + NVIDIA AI Technology Center , first NVIDIA lab in ME", impact: "High", cat: "Innovation", url: "https://blogs.nvidia.com/blog/gtc-2026-news/" },
+      { rank: 6, headline: "Stanlib acquisition of Africa Data Centres approved by SA Competition Comm.", impact: "High", cat: "M&A", url: "https://energychamber.org/data-centers-could-be-the-spark-africas-power-sector-needs/" },
+      { rank: 7, headline: "Israel: $1.5B, 130 MW Dalia Energy DC in Ashdod (IIF + Serverfarm)", impact: "High", cat: "Construction", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 8, headline: "Xneelo: 2nd DC in Samrand, South Africa (JHB,Pretoria corridor)", impact: "Moderate", cat: "Construction", url: "https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026" },
+      { rank: 9, headline: "Qareeb Data Centres: 50 MW edge across 8 MENA markets", impact: "Moderate", cat: "Edge", url: "https://www.globaldatacenterhub.com/p/middle-east-and-africa-100b-ai-and" },
+      { rank: 10, headline: "DCD>Connect MENA 2026 (Apr 20): Groq, Microsoft, Oracle panels", impact: "Watch", cat: "Events", url: "https://www.datacenterdynamics.com/en/dcdconnect-live/mena/2026/" },
+    ]
+  }
+];
+
+const MARKET_STATS = [
+  { label: "Global DC CapEx 2024", value: "$430B", delta: "+25.8% YoY", source: "Network World / Dell'Oro", url: "https://www.networkworld.com/article/3820973/data-center-spending-to-top-1-trillion-by-2029-as-ai-transforms-infrastructure.html" },
+  { label: "Global DC CapEx 2025 (est.)", value: "$598B", delta: "+39% YoY", source: "Brightlio (citing Network World)", url: "https://brightlio.com/data-center-stats/" },
+  { label: "Hyperscaler Top-5 CapEx 2026", value: "$602B+", delta: "AWS, Azure, Google, Meta, Oracle", source: "Acres / Landgate", url: "https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026" },
+  { label: "NVIDIA DC Revenue FY26", value: "$193.5B", delta: "↑ from $116.2B FY25", source: "Yahoo Finance", url: "https://finance.yahoo.com/news/nvidia-launches-groq-3-ai-chip-and-cpu-server-aimed-at-intel-during-gtc-2026-200529139.html" },
+  { label: "NVIDIA Order Pipeline", value: "$1T+", delta: "Through 2027 (Blackwell + Rubin)", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/nvidia-updates-data-center-product-roadmap-following-lpu-launch-at-gtc-2026/" },
+  { label: "Server DRAM Price Change", value: "+95%", delta: "Early 2026 surge", source: "Broadcom News", url: "https://news.broadcom.com/cloud/2026-hardware-crisis-modern-private-cloud-adoption" },
+  { label: "DC Share of Global Memory", value: "70%", delta: "Of all chips produced 2026", source: "Tom's Hardware", url: "https://www.tomshardware.com/pc-components/ram/data-centers-will-consume-70-percent-of-memory-chips-made-in-2026-supply-shortfall-will-cause-the-chip-shortage-to-spread-to-other-segments" },
+  { label: "Avg Construction Cost/MW", value: "$11.3M", delta: "+6% YoY", source: "JLL 2026 DC Outlook", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+  { label: "AI Fit-Out Cost/MW", value: "Up to $25M", delta: "On top of shell & core", source: "JLL 2026 DC Outlook", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+  { label: "Avg Grid Interconnect Wait", value: "4+ years", delta: "Primary markets", source: "JLL 2026 DC Outlook", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+  { label: "NA Colocation Vacancy", value: "2.6%", delta: "All-time low", source: "Acres (citing CBRE NA Trends)", url: "https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026" },
+  { label: "Pre-Leased Under Construction", value: "80%", delta: "Of current pipeline", source: "Acres (citing CBRE NA Trends)", url: "https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026" },
+  { label: "New Capacity 2026-2030", value: "~100 GW", delta: "$1.2T asset value creation", source: "JLL 2026 DC Outlook", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+  { label: "Global DC Market CAGR", value: "14%", delta: "Through 2030", source: "JLL 2026 DC Outlook", url: "https://www.jll.com/en-us/insights/market-outlook/data-center-outlook" },
+  { label: "8-GPU B200 Server Price", value: "$340K-$500K", delta: "Vendor-dependent", source: "Slyd OEM Comparison", url: "https://slyd.com/resources/server-comparison" },
+  { label: "8-GPU B300 Server Price", value: "$430K-$550K+", delta: "Config-dependent", source: "Slyd OEM Comparison", url: "https://slyd.com/resources/server-comparison" },
+  { label: "Liquid Cooling Market 2025", value: "$5.52B", delta: "→ $15.75B by 2030", source: "Introl Vendor Analysis", url: "https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers" },
+  { label: "DC Rack Market 2026", value: "$5.8B", delta: "→ $11.2B by 2032 (11.7% CAGR)", source: "Stratview Research / OpenPR", url: "https://www.openpr.com/news/4431322/data-center-rack-market-2026-2032-industry-size-growth" },
+  { label: "MEA AI DC Market 2026", value: "$2.51B", delta: "→ $8.24B by 2031 (26.8% CAGR)", source: "Mordor Intelligence", url: "https://www.mordorintelligence.com/industry-reports/middle-east-and-africa-artificial-intelligence-ai-data-center-market" },
+  { label: "MEA IT Services Market", value: "$252.8B", delta: "→ $387.1B by 2031 (8.9% CAGR)", source: "ResearchAndMarkets / GlobeNewsWire", url: "https://www.globenewswire.com/news-release/2026/03/19/3259257/28124/en/Middle-East-and-Africa-MEA-IT-Services-Market-2026-2031-A-387-Billion-Opportunity-Led-by-Accenture-IBM-Oracle.html" },
+];
+
+const IC = {
+  Critical: { bg: "#FEE2E220", text: "#EF4444", border: "#EF444444" },
+  High: { bg: "#FFF7ED18", text: "#EA580C", border: "#EA580C44" },
+  Moderate: { bg: "#FFFBEB16", text: "#CA8A04", border: "#CA8A0444" },
+  Watch: { bg: "#ECFEFF18", text: "#06B6D4", border: "#06B6D444" },
+};
+
+const CC = { Compute:"#6366F1","Supply Chain":"#EF4444",Investment:"#10B981",Cooling:"#06B6D4",Construction:"#EA580C",Regulation:"#D97706",Software:"#7C3AED","M&A":"#DB2777",Market:"#10B981",Energy:"#D97706",Connectivity:"#117ACA",Innovation:"#9333EA",Hyperscale:"#6366F1",Policy:"#D97706",Trade:"#EF4444",Edge:"#06B6D4",Events:"#64748B" };
+
+
+const IC_MAP = {Critical:{bg:"#FEE2E220",text:"#EF4444",border:"#EF444444"},High:{bg:"#FFF7ED18",text:"#EA580C",border:"#EA580C44"},Moderate:{bg:"#FFFBEB16",text:"#CA8A04",border:"#CA8A0444"},Watch:{bg:"#ECFEFF18",text:"#06B6D4",border:"#06B6D444"}};
+const CC_MAP = {Compute:"#6366F1","Supply Chain":"#EF4444",Investment:"#10B981",Cooling:"#06B6D4",Construction:"#EA580C",Regulation:"#D97706",Software:"#7C3AED","M&A":"#DB2777",Market:"#10B981",Energy:"#D97706",Connectivity:"#117ACA",Innovation:"#9333EA",Hyperscale:"#6366F1",Policy:"#D97706",Trade:"#EF4444",Edge:"#06B6D4",Events:"#64748B"};
+
+const ALL_SOURCES = [
+  {n:"Network World / Dell\'Oro",u:"https://www.networkworld.com/article/3820973/data-center-spending-to-top-1-trillion-by-2029-as-ai-transforms-infrastructure.html"},
+  {n:"JLL 2026 DC Outlook",u:"https://www.jll.com/en-us/insights/market-outlook/data-center-outlook"},
+  {n:"Acres / Landgate (CBRE)",u:"https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026"},
+  {n:"Sightline Climate",u:"https://www.sightlineclimate.com/research/data-center-outlook"},
+  {n:"Broadcom News",u:"https://news.broadcom.com/cloud/2026-hardware-crisis-modern-private-cloud-adoption"},
+  {n:"Tom\'s Hardware",u:"https://www.tomshardware.com/pc-components/ram/data-centers-will-consume-70-percent-of-memory-chips-made-in-2026-supply-shortfall-will-cause-the-chip-shortage-to-spread-to-other-segments"},
+  {n:"DCD",u:"https://www.datacenterdynamics.com/en/news/nvidia-updates-data-center-product-roadmap-following-lpu-launch-at-gtc-2026/"},
+  {n:"Data Center Knowledge",u:"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026"},
+  {n:"Yahoo Finance (NVIDIA)",u:"https://finance.yahoo.com/news/nvidia-launches-groq-3-ai-chip-and-cpu-server-aimed-at-intel-during-gtc-2026-200529139.html"},
+  {n:"CNBC (GTC Recap)",u:"https://www.cnbc.com/2026/03/20/nvidia-gtc-2026-agentic-ai-chips-tech-download.html"},
+  {n:"IDC / SDxCentral",u:"https://www.sdxcentral.com/news/server-market-explodes-61-as-storage-limps-along-idc/"},
+  {n:"Slyd OEM Comparison",u:"https://slyd.com/resources/server-comparison"},
+  {n:"Mordor Intelligence (MEA)",u:"https://www.mordorintelligence.com/industry-reports/middle-east-and-africa-artificial-intelligence-ai-data-center-market"},
+  {n:"ResearchAndMarkets (MEA IT)",u:"https://www.globenewswire.com/news-release/2026/03/19/3259257/28124/en/Middle-East-and-Africa-MEA-IT-Services-Market-2026-2031-A-387-Billion-Opportunity-Led-by-Accenture-IBM-Oracle.html"},
+  {n:"Grand View Research",u:"https://www.grandviewresearch.com/industry-analysis/data-center-liquid-cooling-market-report"},
+  {n:"Stratview / OpenPR (Racks)",u:"https://www.openpr.com/news/4431322/data-center-rack-market-2026-2032-industry-size-growth"},
+  {n:"African Energy Chamber",u:"https://energychamber.org/data-centers-could-be-the-spark-africas-power-sector-needs/"},
+  {n:"Global DC Hub (MEA)",u:"https://www.globaldatacenterhub.com/p/middle-east-and-africa-100b-ai-and"},
+  {n:"Introl (Cooling Vendors)",u:"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers"},
+  {n:"Brightlio DC Stats",u:"https://brightlio.com/data-center-stats/"},
+  {n:"Deloitte 2026 HW Outlook",u:"https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/hardware-consumer-tech-outlook.html"},
+  {n:"DC Knowledge (March Devs)",u:"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026"},
+  {n:"NVIDIA Newsroom (Rubin)",u:"https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer"},
+  {n:"NVIDIA Tech Blog (Rubin)",u:"https://developer.nvidia.com/blog/inside-the-nvidia-rubin-platform-six-new-chips-one-ai-supercomputer/"}
+];
+
+const e = (t,a={},c='') => { const el=document.createElement(t); Object.entries(a).forEach(([k,v])=>{ if(k==='style'&&typeof v==='object') Object.assign(el.style,v); else if(k==='className') el.className=v; else el.setAttribute(k,v); }); if(typeof c==='string') el.innerHTML=c; else if(c instanceof HTMLElement) el.appendChild(c); else if(Array.isArray(c)) c.forEach(ch=>{ if(ch) el.appendChild(ch); }); return el; };
+
+const totalHW = HARDWARE_CATEGORIES.reduce((a,c)=>a+c.items.length,0);
+
+function badge(text,colors){ return `<span class="badge" style="background:${colors.bg};color:${colors.text};border:1px solid ${colors.border}">${text}</span>`; }
+function catBadge(cat){ const c=CC_MAP[cat]||"#888"; return `<span class="badge" style="background:${c}18;color:${c};border:1px solid ${c}33">${cat}</span>`; }
+function statusBadge(status){ const g=status.includes("Ship")||status==="Available"||status==="Deploying"||status==="Ramping"; const y=status.includes("2026")||status.includes("Soon")||status.includes("Beta")||status.includes("Orders"); const c=g?"#10B981":y?"#CA8A04":"#117ACA"; return `<span class="status-badge" style="background:${c}18;color:${c};border:1px solid ${c}40">${status}</span>`; }
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+let activeTab='overview', hwCat='all', regIdx=0;
+
+// News source tag → URL mapping for hardware catalog
+const NEWS_LINKS = {
+  "U.S. Commerce Dept":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "U.S. Export Controls":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "Reuters":"https://money.usnews.com/investing/news/articles/2026-03-05/nvidia-refocuses-tsmc-capacity-as-export-controls-stall-china-sales-ft-reports",
+  "NVIDIA GTC 2026":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "NVIDIA/Groq":"https://finance.yahoo.com/news/nvidia-launches-groq-3-ai-chip-and-cpu-server-aimed-at-intel-during-gtc-2026-200529139.html",
+  "CNBC":"https://www.cnbc.com/2026/03/20/nvidia-gtc-2026-agentic-ai-chips-tech-download.html",
+  "GTC 2026":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "IDC":"https://www.sdxcentral.com/news/server-market-explodes-61-as-storage-limps-along-idc/",
+  "ASHRAE TC 9.9":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "ASHRAE 90.4":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "Azure Local":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "Deloitte 2026 Outlook":"https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/hardware-consumer-tech-outlook.html",
+  "Deloitte 2026":"https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/hardware-consumer-tech-outlook.html",
+  "AMD Advancing AI":"https://www.datacenterdynamics.com/en/news/hpe-dell-lenovo-and-supermicro-detail-new-server-offerings-featuring-amds-new-mi325x-gpus-and-epyc-cpus/",
+  "AMD":"https://www.datacenterdynamics.com/en/news/hpe-dell-lenovo-and-supermicro-detail-new-server-offerings-featuring-amds-new-mi325x-gpus-and-epyc-cpus/",
+  "650 Group":"https://slyd.com/resources/oem-comparison",
+  "Kavout":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "Ken Research":"https://www.kenresearch.com/china-data-center-server-market",
+  "China Five-Year Plan":"https://www.sightlineclimate.com/research/data-center-outlook",
+  "Intel":"https://slyd.com/resources/server-comparison",
+  "Dell GTC 2026":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "Dell":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "Data Center Knowledge":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "Principled Technologies":"https://www.dell.com/en-us/shop/scc/sc/servers",
+  "The Brand Hopper":"https://thebrandhopper.com/brand/who-are-supermicros-top-competitors-in-technology-industry/",
+  "Slyd Analysis":"https://slyd.com/resources/server-comparison",
+  "Slyd":"https://slyd.com/resources/oem-comparison",
+  "HPE GTC 2026":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "HPE":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "SEC/DOJ":"https://thebrandhopper.com/brand/who-are-supermicros-top-competitors-in-technology-industry/",
+  "Supermicro":"https://thebrandhopper.com/brand/who-are-supermicros-top-competitors-in-technology-industry/",
+  "CES 2026":"https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer",
+  "Lenovo/NVIDIA":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "Cisco":"https://intuitionlabs.ai/articles/on-prem-ai-infrastructure-comparison",
+  "IntuitionLabs":"https://intuitionlabs.ai/articles/on-prem-ai-infrastructure-comparison",
+  "NVIDIA Tech Blog":"https://developer.nvidia.com/blog/inside-the-nvidia-rubin-platform-six-new-chips-one-ai-supercomputer/",
+  "NVIDIA":"https://developer.nvidia.com/blog/inside-the-nvidia-rubin-platform-six-new-chips-one-ai-supercomputer/",
+  "Yahoo Finance":"https://finance.yahoo.com/news/nvidia-launches-groq-3-ai-chip-and-cpu-server-aimed-at-intel-during-gtc-2026-200529139.html",
+  "DCD":"https://www.datacenterdynamics.com/en/news/nvidia-updates-data-center-product-roadmap-following-lpu-launch-at-gtc-2026/",
+  "DCD Dec 2025":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "IEEE 802.3":"https://standards.ieee.org/ieee/802.3/",
+  "IEEE 802.3df":"https://standards.ieee.org/ieee/802.3df/",
+  "IEEE 446":"https://standards.ieee.org/ieee/446/",
+  "Lawrence Berkeley Lab":"https://brightlio.com/data-center-stats/",
+  "Vertiv Jan 2026":"https://www.prnewswire.com/news-releases/vertiv-introduces-new-modular-liquid-cooling-infrastructure-solution-to-support-high-density-compute-requirements-in-north-america-and-emea-302661073.html",
+  "Vertiv":"https://www.prnewswire.com/news-releases/vertiv-introduces-new-modular-liquid-cooling-infrastructure-solution-to-support-high-density-compute-requirements-in-north-america-and-emea-302661073.html",
+  "NFPA 75":"https://blog.amphenol-sensors.com/industrial-blog/data-center-design-standards",
+  "NFPA 110":"https://blog.amphenol-sensors.com/industrial-blog/data-center-design-standards",
+  "Introl":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "ZutaCore":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "Microsoft":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "EU Ecodesign 2019/424":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "EU Ecodesign":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "EU Data Center Regulations":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "Schneider":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "Eaton/CoolIT":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "Eaton":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "Grand View Research":"https://www.grandviewresearch.com/industry-analysis/data-center-liquid-cooling-market-report",
+  "OCP Foundation":"https://www.mordorintelligence.com/industry-reports/ocp-servers-market",
+  "OCP":"https://www.mordorintelligence.com/industry-reports/ocp-servers-market",
+  "Blackridge Research":"https://www.blackridgeresearch.com/blog/latest-list-top-largest-biggest-data-center-cooling-companies-world",
+  "LiquidStack Nov 2025":"https://www.grandviewresearch.com/industry-analysis/data-center-liquid-cooling-market-report",
+  "DigiTimes":"https://www.globalsmt.net/world-news/data-centers-are-the-new-benchmark-according-to-new-report-from-digitimes-asia/",
+  "Mordor Intelligence":"https://www.mordorintelligence.com/industry-reports/ocp-servers-market",
+  "ResearchAndMarkets":"https://www.globenewswire.com/news-release/2026/01/23/3224801/28124/en/Navigating-the-AI-Server-Ecosystem-CPU-FPGA-and-GPU-Architectures-Drive-Value-for-Enterprises-and-Data-Centers.html",
+  "GlobalSMT":"https://www.globalsmt.net/world-news/data-centers-are-the-new-benchmark-according-to-new-report-from-digitimes-asia/",
+  "U.S. Entity List":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "Pure Storage":"https://www.sdxcentral.com/news/server-market-explodes-61-as-storage-limps-along-idc/",
+  "Everpure GTC 2026":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "VAST Data GTC 2026":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "DDN":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "GlobeNewsWire":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "Hitachi":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "Infinidat":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "Nimbus":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "Uptime Institute":"https://blog.amphenol-sensors.com/industrial-blog/data-center-design-standards",
+  "Landgate":"https://www.landgate.com/news/weekly-data-center-news-01-26-2026",
+  "White House Mar 2026":"https://datacenterworld.com/news-insights/",
+  "Data Center World":"https://datacenterworld.com/news-insights/",
+  "ABB":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "Delta":"https://www.globenewswire.com/news-release/2025/10/22/3170835/28124/en/Hyperscale-Data-Center-Market-Outlook-2025-2030-Sustainable-Data-Hubs-Microgrids-and-Liquid-Cooling-Lead-the-Way.html",
+  "Bloom Energy":"https://datacenterworld.com/news-insights/",
+  "Huawei":"https://www.kenresearch.com/china-data-center-server-market",
+  "ASUS":"https://www.globenewswire.com/news-release/2026/01/23/3224801/28124/en/Navigating-the-AI-Server-Ecosystem-CPU-FPGA-and-GPU-Architectures-Drive-Value-for-Enterprises-and-Data-Centers.html",
+  "IBM":"https://tadviser.com/index.php/Article:Data_Center_Infrastructure_(Global_Market)",
+  "TAdviser":"https://tadviser.com/index.php/Article:Data_Center_Infrastructure_(Global_Market)",
+  "DCD MENA 2026":"https://www.datacenterdynamics.com/en/dcdconnect-live/mena/2026/",
+};
+
+// Convert [Source Name] tags in news text to hyperlinks
+function linkNews(text) {
+  let html = esc(text);
+  // Match [Source Name] patterns and replace with linked versions
+  html = html.replace(/\[([^\]]+)\]/g, function(match, name) {
+    const url = NEWS_LINKS[name];
+    if (url) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="news-src" title="Source: ${name}">[${name}]</a>`;
+    }
+    return `<strong style="color:#002147">[${name}]</strong>`;
+  });
+  return html;
+}
+
+// Build tabs nav
+const tabsNav=document.getElementById('tabs');
+[["overview","Overview"],["hardware",`Hardware Catalog (${totalHW})`],["regions","Top 10 by Region"],["market",`Market Data (${MARKET_STATS.length})`]].forEach(([k,l])=>{
+  const btn=document.createElement('button');
+  btn.textContent=l;
+  btn.dataset.tab=k;
+  if(k===activeTab) btn.classList.add('active');
+  btn.onclick=()=>switchTab(k);
+  tabsNav.appendChild(btn);
+});
+
+function switchTab(k){
+  activeTab=k;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===k));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+k));
+}
+
+// ===== OVERVIEW TAB =====
+function renderOverview(){
+  const el=document.getElementById('tab-overview');
+  const stats=[
+    {v:"$1T+",l:"NVIDIA pipeline",c:"#117ACA",u:"https://www.datacenterdynamics.com/en/news/nvidia-updates-data-center-product-roadmap-following-lpu-launch-at-gtc-2026/",s:"DCD"},
+    {v:"+95%",l:"DRAM price surge",c:"#EF4444",u:"https://news.broadcom.com/cloud/2026-hardware-crisis-modern-private-cloud-adoption",s:"Broadcom"},
+    {v:"70%",l:"Memory → DCs",c:"#EA580C",u:"https://www.tomshardware.com/pc-components/ram/data-centers-will-consume-70-percent-of-memory-chips-made-in-2026-supply-shortfall-will-cause-the-chip-shortage-to-spread-to-other-segments",s:"Tom's Hardware"},
+    {v:"$11.3M",l:"Cost per MW",c:"#CA8A04",u:"https://www.jll.com/en-us/insights/market-outlook/data-center-outlook",s:"JLL"},
+    {v:"4+ yrs",l:"Grid wait time",c:"#EA580C",u:"https://www.jll.com/en-us/insights/market-outlook/data-center-outlook",s:"JLL"},
+    {v:"2.6%",l:"NA colo vacancy",c:"#10B981",u:"https://landvalues.acres.com/8-u.s.-data-center-trends-for-2026",s:"Acres/CBRE"},
+    {v:"$4B",l:"Equinix-atNorth",c:"#DB2777",u:"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-march-2026",s:"DC Knowledge"},
+    {v:"376 MW+",l:"UAE live capacity",c:"#117ACA",u:"https://www.datacenterknowledge.com/build-design/uae-data-centers-powering-the-middle-east-s-ai-and-cloud-revolution",s:"DC Knowledge"}
+  ];
+  const wa=[["GTC 2026 follow-on: partner ecosystem + developer tooling","Compute","This week"],["Hyperscaler Q1 previews; $650B CapEx confirmation","Investment","Early Apr"],["DRAM spot pricing , stabilization or Q2 escalation","Supply Chain","Ongoing"],["Data Center World (D.C.) agenda + speakers","Events","Apr 20,23"],["DCD>Connect MENA 2026 , Groq, MSFT, Oracle","Events","Apr 20"]];
+  el.innerHTML = `<div class="summary">GTC 2026 reshaped the DC hardware landscape with NVIDIA's $1T+ order pipeline, Vera Rubin shipments, and Groq 3 LPU debut. DRAM prices surged 95% as data centers absorb 70% of global memory. Construction costs climbed to $11.3M/MW, grid delays exceed 4 years, and the Equinix-atNorth $4B deal headlined M&amp;A activity. In the Middle East, UAE surpassed 376 MW live capacity and Saudi Arabia's HUMAIN advanced as a multi-GW sovereign platform.</div>
+  <div class="stats-grid">${stats.map(s=>`<div class="stat" style="--sc:${s.c}"><div class="stat-v"><a href="${s.u}" target="_blank" rel="noopener noreferrer" title="Source: ${esc(s.s)}">${s.v}</a></div><div class="stat-l">${s.l} · <a href="${s.u}" target="_blank" rel="noopener noreferrer">${esc(s.s)} ↗</a></div></div>`).join('')}</div>
+  <div class="section-label">WEEK AHEAD</div>
+  <div class="tbl-wrap"><table class="wa-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>#</th><th>Item</th><th>Category</th><th>Timing</th></tr></thead><tbody>${wa.map((r,i)=>`<tr><td class="wa-idx">${String(i+1).padStart(2,'0')}</td><td class="wa-item">${esc(r[0])}</td><td>${catBadge(r[1])}</td><td class="wa-time">${r[2]}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+// ===== HARDWARE TAB =====
+function renderHardware(){
+  const el=document.getElementById('tab-hardware');
+  const cats = hwCat==='all' ? HARDWARE_CATEGORIES : HARDWARE_CATEGORIES.filter(c=>c.category===hwCat);
+  const filters = [{k:'all',l:`All (${totalHW})`},...HARDWARE_CATEGORIES.map(c=>({k:c.category,l:`${c.category.split(' ')[0]} (${c.items.length})`}))];
+  el.innerHTML = `<div class="filter-bar"><span class="filter-label">FILTER</span>${filters.map(f=>`<button class="fbtn${hwCat===f.k?' active':''}" data-hw="${esc(f.k)}">${esc(f.l)}</button>`).join('')}</div>` +
+    cats.map(cat=>`<div style="margin-bottom:26px"><div class="cat-hdr">${cat.category.toUpperCase()} , ${cat.items.length} ITEMS</div><div class="tbl-wrap"><table class="hw-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>Vendor</th><th>Model</th><th>Type</th><th>Status</th><th>Power</th><th>Cooling</th><th>Price</th><th>Notes</th><th class="news-th">Critical News / Standards / Policy</th></tr></thead><tbody>${cat.items.map(it=>`<tr style="vertical-align:top"><td class="vendor-cell">${esc(it.vendor)}</td><td class="model-cell">${esc(it.model)}</td><td class="type-cell">${esc(it.type)}</td><td>${statusBadge(it.status)}</td><td class="mono-cell">${esc(it.power)}</td><td class="cool-cell">${esc(it.cooling)}</td><td class="mono-cell">${esc(it.price)}</td><td class="note-cell">${esc(it.note)}</td><td class="news-cell">${linkNews(it.news)}</td></tr>`).join('')}</tbody></table></div></div>`).join('');
+  el.querySelectorAll('.fbtn').forEach(btn=>btn.onclick=()=>{hwCat=btn.dataset.hw;renderHardware();});
+}
+
+// ===== REGIONS TAB =====
+function renderRegions(){
+  const el=document.getElementById('tab-regions');
+  const r=REGIONS[regIdx];
+  el.innerHTML = `<div style="display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap">${REGIONS.map((rg,i)=>`<button class="rbtn${regIdx===i?' active':''}" data-ri="${i}">${rg.flag} ${esc(rg.region)}</button>`).join('')}</div>
+  <div class="reg-cards"><div class="reg-card" style="--rc:#117ACA"><div class="reg-card-label">MARKET SIZE</div><div class="reg-card-value"><a href="${r.sizeUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--rc);text-decoration:none">${esc(r.size)}</a></div></div><div class="reg-card" style="--rc:#EA580C"><div class="reg-card-label">KEY METRIC</div><div class="reg-card-value"><a href="${r.metricUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--rc);text-decoration:none">${esc(r.metric)}</a></div></div></div>
+  <div class="section-label">TOP 10 , ${r.region.toUpperCase()}</div>
+  <div class="tbl-wrap"><table class="reg-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>#</th><th>Headline</th><th>Impact</th><th>Category</th></tr></thead><tbody>${r.items.map(it=>{const ic=IC_MAP[it.impact];return`<tr><td class="rank-cell">${it.rank}</td><td class="hl-cell"><a href="${it.url}" target="_blank" rel="noopener noreferrer" style="color:#1E3A5F;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#117ACA'" onmouseout="this.style.color='#1E3A5F'">${esc(it.headline)}</a></td><td>${badge(it.impact.toUpperCase(),ic)}</td><td>${catBadge(it.cat)}</td></tr>`;}).join('')}</tbody></table></div>`;
+  el.querySelectorAll('.rbtn').forEach(btn=>btn.onclick=()=>{regIdx=parseInt(btn.dataset.ri);renderRegions();});
+}
+
+// ===== MARKET TAB =====
+function renderMarket(){
+  const el=document.getElementById('tab-market');
+  el.innerHTML = `<div class="section-label">MARKET DATA , ${MARKET_STATS.length} DATAPOINTS</div>
+  <div class="tbl-wrap"><table class="mkt-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>#</th><th>Metric</th><th>Value</th><th>Context</th><th>Source</th></tr></thead><tbody>${MARKET_STATS.map((x,i)=>`<tr><td class="idx-cell">${String(i+1).padStart(2,'0')}</td><td class="metric-cell">${esc(x.label)}</td><td class="val-cell">${esc(x.value)}</td><td class="ctx-cell">${esc(x.delta)}</td><td class="src-cell"><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" class="src-link">${esc(x.source)} ↗</a></td></tr>`).join('')}</tbody></table></div>
+  <div class="sources-box"><div class="sources-title">ALL SOURCES , CLICK TO VERIFY</div><div class="src-badges">${ALL_SOURCES.map(s=>`<a href="${s.u}" target="_blank" rel="noopener noreferrer" class="src-badge">${s.n} ↗</a>`).join('')}</div></div>`;
+}
+
+renderOverview();renderHardware();renderRegions();renderMarket();
+</script>
+</body>
+</html>
