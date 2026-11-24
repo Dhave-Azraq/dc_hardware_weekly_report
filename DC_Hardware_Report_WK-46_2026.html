@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC Hardware Weekly Report, WK-46/2026, Azraq Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#1E3A5F;min-height:100vh}
+.grid-bg{position:fixed;inset:0;opacity:.03;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,33,71,.15) 39px,rgba(0,33,71,.15) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,33,71,.15) 39px,rgba(0,33,71,.15) 40px)}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+header{border-bottom:1px solid #E5E7EB;padding-bottom:18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.tag{font-size:10px;letter-spacing:3px;color:#117ACA;margin-bottom:6px;font-weight:600}
+h1{font-size:clamp(22px,4vw,34px);font-weight:700;line-height:1.1;color:#002147}
+h1 span{color:#117ACA}
+.meta{font-size:10px;color:#64748B;line-height:2;text-align:right}
+.meta .int{color:#117ACA;font-weight:600}
+nav{display:flex;gap:2px;margin-bottom:22px;border-bottom:1px solid #E5E7EB;overflow-x:auto}
+nav button{font-family:'Inter',sans-serif;font-size:11px;padding:10px 16px;background:none;border:none;cursor:pointer;color:#64748B;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+nav button.active{color:#117ACA;border-bottom-color:#117ACA}
+nav button:hover{color:#002E63}
+.tab{display:none}.tab.active{display:block}
+.summary{font-size:14px;line-height:1.8;color:#334155;margin:0 0 24px;padding:14px 18px;background:#EFF6FF;border:1px solid rgba(17,122,202,.15);border-radius:6px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:28px}
+.stat{padding:12px 14px;background:#FFFFFF;border-radius:6px;border-left:3px solid var(--sc);box-shadow:0 1px 3px rgba(0,33,71,.06)}
+.stat-v{font-size:24px;color:var(--sc);line-height:1;margin-bottom:4px;font-weight:700}
+.stat-v a{color:inherit;text-decoration:none;transition:opacity .2s}
+.stat-v a:hover{opacity:.75}
+.stat-l{font-size:9px;color:#64748B}
+.stat-l a{color:#64748B;text-decoration:none;font-style:italic}
+.stat-l a:hover{color:#334155}
+.section-label{font-size:10px;letter-spacing:2px;color:#117ACA;margin-bottom:10px;font-weight:600}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-size:9px;letter-spacing:1px;color:#64748B;text-align:left;padding:8px;font-weight:600;white-space:nowrap;position:sticky;top:0;background:#F8FAFC;z-index:2;border-bottom:2px solid #E5E7EB}
+td{padding:10px 8px;border-bottom:1px solid #E5E7EB}
+tr:hover{background:#EFF6FF}
+.badge{font-size:9px;padding:2px 8px;border-radius:2px;white-space:nowrap;letter-spacing:.8px;display:inline-block}
+.status-badge{font-size:9px;padding:2px 8px;border-radius:2px;white-space:nowrap}
+.filter-bar{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:9px;letter-spacing:2px;color:#64748B;margin-right:4px}
+.fbtn{font-family:'Inter',sans-serif;font-size:10px;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid #E5E7EB;background:#FFFFFF;color:#64748B;transition:all .2s}
+.fbtn.active{border-color:#117ACA;background:#EFF6FF;color:#117ACA;font-weight:600}
+.fbtn:hover{border-color:#117ACA;color:#117ACA}
+.rbtn{font-family:'Inter',sans-serif;font-size:11px;padding:8px 14px;border-radius:3px;cursor:pointer;border:1px solid #E5E7EB;background:#FFFFFF;color:#64748B;transition:all .2s}
+.rbtn.active{border-color:#117ACA;background:#EFF6FF;color:#117ACA;font-weight:600}
+.rbtn:hover{border-color:#117ACA;color:#117ACA}
+.cat-hdr{font-size:10px;letter-spacing:2px;color:#117ACA;margin-bottom:8px;padding:5px 0;border-bottom:2px solid rgba(17,122,202,.2);font-weight:600}
+.hw-table{min-width:1100px}
+.hw-table td.news-cell{font-size:10px;color:#334155;max-width:320px;line-height:1.6;padding:10px;background:#EFF6FF;border-left:1px solid rgba(17,122,202,.15)}
+.hw-table td.news-cell a.news-src{color:#117ACA;text-decoration:none;font-weight:600;border-bottom:1px dotted rgba(17,122,202,.3);transition:color .2s}
+.hw-table td.news-cell a.news-src:hover{color:#002E63}
+.hw-table td.model-cell{color:#117ACA;font-size:11px;font-weight:600}
+.hw-table td.vendor-cell{font-weight:700;color:#002147;white-space:nowrap}
+.hw-table td.type-cell{color:#64748B;font-size:11px}
+.hw-table td.mono-cell{font-size:10px;color:#64748B}
+.hw-table td.cool-cell{font-size:11px;color:#334155}
+.hw-table td.note-cell{font-size:11px;color:#334155;max-width:200px}
+.hw-table th.news-th{min-width:280px}
+.reg-cards{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.reg-card{padding:10px 18px;background:#FFFFFF;border-radius:6px;border-left:3px solid var(--rc);flex:1 1 200px;box-shadow:0 1px 3px rgba(0,33,71,.06)}
+.reg-card-label{font-size:9px;letter-spacing:1.5px;color:#64748B;margin-bottom:3px}
+.reg-card-value{font-size:17px;color:var(--rc);font-weight:700}
+.reg-table{min-width:650px}
+.reg-table td.rank-cell{font-size:15px;color:rgba(17,122,202,.35);font-weight:700;width:36px;text-align:center}
+.reg-table td.hl-cell{color:#1E3A5F;line-height:1.5}
+.mkt-table td.idx-cell{font-size:10px;color:rgba(17,122,202,.3);width:30px}
+.mkt-table td.metric-cell{color:#1E3A5F}
+.mkt-table td.val-cell{font-size:14px;font-weight:700;color:#117ACA}
+.mkt-table td.ctx-cell{font-size:11px;color:#64748B}
+.mkt-table td.src-cell{font-size:11px}
+.src-link{color:#117ACA;text-decoration:none;border-bottom:1px dotted rgba(17,122,202,.4);transition:color .2s}
+.src-link:hover{color:#002E63}
+.sources-box{margin-top:24px;padding:14px 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;box-shadow:0 1px 3px rgba(0,33,71,.06)}
+.sources-title{font-size:9px;letter-spacing:2px;color:#117ACA;margin-bottom:6px;font-weight:600}
+.src-badges{display:flex;flex-wrap:wrap;gap:6px}
+.src-badge{font-size:9px;padding:3px 10px;border-radius:2px;background:#EFF6FF;border:1px solid rgba(17,122,202,.15);color:#117ACA;text-decoration:none;transition:all .2s;white-space:nowrap}
+.src-badge:hover{background:rgba(17,122,202,.12);color:#002E63}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid #E5E7EB;text-align:center}
+footer div{font-size:9px;letter-spacing:2px;color:#64748B;line-height:2}
+.wa-table{font-size:13px}
+.wa-table td.wa-idx{font-size:11px;color:rgba(17,122,202,.5);width:30px;font-weight:600}
+.wa-table td.wa-item{color:#1E3A5F}
+.wa-table td.wa-time{font-size:10px;color:#64748B}
+::-webkit-scrollbar{height:4px;width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,33,71,.12);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="tag">AZRAQ INTELLIGENCE</div>
+      <h1>DC Hardware <span>Weekly Report</span></h1>
+    </div>
+    <div class="meta">
+      <div>WK-46/2026</div><div>November 9 – 15, 2026</div>
+    </div>
+  </header>
+  <nav id="tabs"></nav>
+  <div id="tab-overview" class="tab active"></div>
+  <div id="tab-hardware" class="tab"></div>
+  <div id="tab-regions" class="tab"></div>
+  <div id="tab-market" class="tab"></div>
+  <footer><div>AZRAQ INTELLIGENCE · DC HARDWARE WEEKLY REPORT · WK-46/2026 · azraq.ai</div></footer>
+</div>
+<script>
+const HARDWARE_CATEGORIES = [
+  {
+    category: "GPU / AI Accelerators",
+    items: [
+      { vendor: "NVIDIA", model: "Vera Rubin NVL72", type: "GPU Rack System", status: "Shipping Samples", power: "~120 kW/rack", cooling: "Liquid (DLC)", price: "N/A (rack-scale)", note: "First hyperscale deployment on Azure; 7-chip full-stack platform", news: "[CoreWeave Q3] Nov 10: CoreWeave, the largest NVIDIA-based neocloud, posts $3.66bn revenue, ~$132.5bn backlog and $14.5bn quarterly capex. [NVIDIA COP31] Nov 11: NVIDIA sustainability chief at COP31 says DCs 'should be an asset to communities'. [TechCrunch export chips] Nov 13: export-banned NVIDIA chips reported behind China's strongest AI models -- export-control enforcement risk." },
+      { vendor: "NVIDIA", model: "Groq 3 LPU", type: "Language Processing Unit", status: "H2 2026", power: "TBD", cooling: "Liquid (LPX rack)", price: "N/A", note: "128 LPUs per LPX rack; 128GB on-chip SRAM; 640 TBps scale-up", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "NVIDIA", model: "Blackwell B300 (HGX)", type: "GPU Accelerator", status: "Shipping", power: "~1,200W TDP", cooling: "Liquid required", price: "$430K-$550K (8-GPU)", note: "Dominant AI training GPU; NVLink interconnect", news: "[Axios export controls] Nov 11: report of White House-Commerce friction over NVIDIA China chip export controls. [Cerebras outlook] Nov 12: Cerebras guides Q4 ~$320M vs $271M consensus, ~700 MW contracted -- inference challengers gaining share." },
+      { vendor: "NVIDIA", model: "RTX PRO 6000 BSE", type: "Inference GPU", status: "Available", power: "300W", cooling: "Air", price: "~$6,800", note: "100x over CPU-only for vision AI; single-slot", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "NVIDIA", model: "RTX PRO 4500 BSE", type: "Inference GPU", status: "Coming Soon", power: "165W", cooling: "Air", price: "TBD", note: "Compact inference; announced at GTC 2026", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "AMD", model: "Instinct MI325X", type: "GPU Accelerator", status: "Available", power: "~750W TDP", cooling: "Air / Liquid", price: "~$20K-$25K", note: "Adopted by Dell, HPE, Supermicro, Lenovo", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Huawei", model: "Ascend 910C", type: "AI Accelerator", status: "Shipping (China)", power: "~310W TDP", cooling: "Air / Liquid", price: "N/A (domestic)", note: "China's top AI chip; CANN/Ascend stack; Baidu, Alibaba, Tencent adoption", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Intel", model: "Gaudi 3", type: "AI Accelerator", status: "Available", power: "~600W TDP", cooling: "Air / Liquid", price: "~$15K-$18K", note: "Price-sensitive niche; BF16 inference focus", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Cambricon", model: "MLU370-X8", type: "AI Accelerator", status: "Shipping (China)", power: "~250W", cooling: "Air", price: "N/A (domestic)", note: "Chinese AI chip for inference; state-backed adoption", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Qualcomm", model: "AI200", type: "AI Inference Accelerator", status: "2026", power: "160 kW/rack", cooling: "Direct liquid (DLC)", price: "TBD", note: "768 GB LPDDR; PCIe scale-up + Ethernet scale-out; Hexagon NPU-based inference", news: "[Yahoo Amon interview] Nov 12: CEO Cristiano Amon says there is 'no AI correction' for Qualcomm because it is new to data centres; flags power and construction as limits on the build-out. [24/7 Qualcomm shortage] Nov 13: Amon tells an investor conference chipmakers face an 'extreme shortage'. [Qualcomm FQ4 call] Reference (Nov 4 results): Dec-quarter DC revenue guided above $650M as shipments to two hyperscalers begin; FY27 DC target $5bn, exiting at a $7bn run rate." },
+      { vendor: "Qualcomm", model: "AI250", type: "AI Inference Accelerator", status: "2027", power: "TBD", cooling: "Direct liquid (DLC)", price: "TBD", note: "Near-memory computing; >10x effective memory bandwidth; H1 2027 reference designs", news: "[Qualcomm WARN] Nov 13: California WARN notices -- 442 San Diego County roles plus at least 75 in Santa Clara County, separations Jan 2027. [Trefis Qualcomm] Nov 13: the DC ramp is the thesis's 'loose end'. [GuruFocus QCOM downgrade] Nov 9: Freedom Broker cuts to Hold, PT $185 (from $200). [Benzinga QCOM Nov 13] Shares fell ~4-5% intraday on Nov 13. No new Dragonfly AI200/AI250/AI300 product news this week." }
+    ]
+  },
+  {
+    category: "Server Platforms",
+    items: [
+      { vendor: "Dell", model: "PowerEdge XE9812", type: "Vera Rubin NVL72", status: "H2 2026", power: "Rack-scale", cooling: "Liquid", price: "Enterprise", note: "Dell's Vera Rubin for training + inference", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Dell", model: "PowerEdge XE9680", type: "8-GPU AI Server", status: "Shipping", power: "~16 kW", cooling: "Liquid recommended", price: "$340K-$500K", note: "Flagship AI; HGX B200/B300 support", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Dell", model: "PowerEdge R9822 / M9822", type: "Vera CPU Server", status: "Sep 2026", power: "TBD", cooling: "Air / Liquid", price: "TBD", note: "NVIDIA Vera CPU-based compute", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Dell", model: "PowerEdge XE7745", type: "AMD GPU Server", status: "Available", power: "~14 kW", cooling: "Air (4U)", price: "Enterprise", note: "Up to 8 double-width or 16 single-width GPUs", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "HPE", model: "Cray XD670", type: "HGX B300 Server", status: "Shipping", power: "~15 kW", cooling: "DLC", price: "Enterprise", note: "Lowest 5-yr TCO (~$2.31M)", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "HPE", model: "Cray GX240", type: "Vera CPU Blade", status: "2027", power: "TBD", cooling: "Liquid", price: "TBD", note: "First HPE Vera CPU server", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "HPE", model: "ProLiant XD685", type: "8×MI325X Server", status: "Available", power: "~14 kW", cooling: "Air / DLC", price: "Enterprise", note: "Modular 5U; 8-node/rack density", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Supermicro", model: "SYS-821GB-TNRX", type: "HGX B300 / GB300", status: "Shipping", power: "~16 kW", cooling: "DLC-2 (98% heat)", price: "10-15% below Dell", note: "2-4 week lead; 96 GPUs per 52U", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Supermicro", model: "H14 Product Line", type: "EPYC 9005 Servers", status: "Available", power: "Up to 500W/CPU", cooling: "Air / Liquid", price: "Competitive", note: "7 variants; up to 192 cores, 10 GPUs", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Lenovo", model: "ThinkSystem SR675i", type: "AI Inference Server", status: "Available", power: "TBD", cooling: "Neptune", price: "TruScale", note: "CES 2026; manufacturing, healthcare", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Lenovo", model: "ThinkEdge SE455i", type: "Edge AI Server", status: "Available", power: "Low", cooling: "Air", price: "TruScale", note: "Ultra-compact edge deployment", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Cisco", model: "Secure AI Factory", type: "Reference Arch", status: "Available", power: "Varies", cooling: "Varies", price: "Custom", note: "UCS + Nexus + AI Defense + NVIDIA GPUs", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Quanta / QCT", model: "QuantaGrid S74G-2U", type: "OCP AI Server", status: "Shipping", power: "~14 kW", cooling: "Air / DLC", price: "ODM direct", note: "OCP-compliant; 30-60 day lead; hyperscaler-preferred", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Foxconn / Hon Hai", model: "GB200 NVL72 Rack", type: "ODM AI Rack", status: "Shipping", power: "Rack-scale", cooling: "Liquid", price: "ODM direct", note: "World's largest EMS; NVIDIA GB200 rack builder", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Inventec", model: "AI Server Platform", type: "ODM GPU Server", status: "Shipping", power: "~12 kW", cooling: "Air / Liquid", price: "ODM direct", note: "OCP member; hyperscale cloud focus", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Inspur", model: "NF5688M7", type: "8-GPU AI Server", status: "Shipping", power: "~15 kW", cooling: "Multi-fluid cooling", price: "Competitive", note: "#1 server vendor for China public cloud; JDM model", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Gigabyte / Giga Computing", model: "G593-ZD2 / SP5 Platform", type: "GPU/EPYC Server", status: "Available", power: "~12 kW", cooling: "Air / Liquid", price: "Value tier", note: "Fast arch pivot; 60+ servers updated for EPYC 9005", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Wistron", model: "GB200 NVL72 Rack", type: "ODM AI Rack", status: "Shipping", power: "Rack-scale", cooling: "Liquid", price: "ODM direct", note: "Surged to #3 EMS/ODM on GB200 deliveries", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Huawei", model: "FusionServer Pro 2488H V7", type: "4-Socket AI Server", status: "Shipping", power: "~10 kW", cooling: "Air", price: "Domestic pricing", note: "Kunpeng ARM + Ascend NPU; Chinese sovereign cloud", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Fujitsu", model: "PRIMERGY RX2540 M7", type: "2U Rack Server", status: "Available", power: "~1.2 kW", cooling: "Air", price: "Mid-range", note: "Japan/EU focus; reliability + localized support", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "IBM", model: "Power S1024 / LinuxONE", type: "Mission-Critical Server", status: "Available", power: "Varies", cooling: "Air", price: "Premium", note: "Hybrid cloud + AI; Power Systems for enterprise", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "ASUS / ASUSTeK", model: "ESC8000A-E12 (2U)", type: "8-GPU AI Server", status: "Available", power: "~12 kW", cooling: "Air / Liquid", price: "Competitive", note: "Consumer brand expanding into enterprise AI", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." }
+    ]
+  },
+  {
+    category: "Networking & Interconnect",
+    items: [
+      { vendor: "NVIDIA", model: "Spectrum-6 SPX", type: "Networking Rack", status: "Announced", power: "Rack-scale", cooling: "Liquid", price: "N/A", note: "AI factory networking rack (GTC 2026)", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "NVIDIA", model: "BlueField-4 STX", type: "Storage / DPU Rack", status: "Announced", power: "Rack-scale", cooling: "Liquid", price: "N/A", note: "New storage arch; DPU-accelerated", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "NVIDIA", model: "NVLink 6 Switch", type: "GPU Interconnect", status: "H2 2026", power: "Integrated", cooling: "Liquid", price: "Bundled", note: "Part of Vera Rubin platform", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "NVIDIA", model: "ConnectX-8", type: "Network Adapter", status: "H2 2026", power: "Low", cooling: "Air", price: "TBD", note: "Next-gen SmartNIC for Vera Rubin", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Arista/Broadcom", model: "800G Ethernet", type: "DC Switching", status: "Ramping", power: "Varies", cooling: "Air/Liquid", price: "Varies", note: "AI cluster backbone; east-west traffic", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Juniper / HPE", model: "QFX5240 / AI Grid", type: "400G DC Spine", status: "Available", power: "Varies", cooling: "Air", price: "Enterprise", note: "HPE AI Grid combines Juniper networking + ProLiant", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Huawei", model: "CloudEngine 16800", type: "400G DC Switch", status: "Shipping", power: "Varies", cooling: "Air", price: "Domestic pricing", note: "China's leading DC switch; AI fabric-ready", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "ZTE", model: "ZXR10 M6000-S", type: "DC Core Router", status: "Available", power: "Varies", cooling: "Air", price: "Mid-range", note: "Chinese market; carrier-grade DC routing", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Celestica", model: "DS4000 Series", type: "OCP Network Switch", status: "Shipping", power: "Varies", cooling: "Air", price: "ODM direct", note: "OCP-compliant; white-box switching for hyperscale", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Alphawave Semi", model: "Connectivity IP Portfolio", type: "DC Interconnect Silicon", status: "Available", power: "Low", cooling: "N/A", price: "IP licensing + silicon", note: "UK-based (London); PCIe 6.0, UCIe, 224G SerDes; Qualcomm $2.4B acquisition pending", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." }
+    ]
+  },
+  {
+    category: "Cooling & Thermal",
+    items: [
+      { vendor: "Vertiv", model: "CoolChip CDU", type: "Coolant Distribution", status: "Available", power: "70,1,350 kW", cooling: "DTC / RDHx", price: "Varies", note: "In-rack, in-row, perimeter options", news: "[DRIL Sao Paulo] Nov 9: Digital Realty liquid-cooling lab for 150 kW+ racks opens in Brazil. [Torus DCD] Prefab 1-20 MW AI modules shipping 12-16 weeks from contract." },
+      { vendor: "Vertiv", model: "MegaMod HDX", type: "Prefab Cooling", status: "Available", power: "High-density", cooling: "DLC + Air hybrid", price: "Custom", note: "Modular; NA & EMEA; factory-tested", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Vertiv", model: "XDU Series", type: "Extreme Density", status: "Available", power: "200+ kW/rack", cooling: "Liquid", price: "Custom", note: "CoreWeave deploys; GB200 NVL72", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Schneider", model: "EcoStruxure Cooling", type: "Cooling Software", status: "Available", power: "N/A", cooling: "Smart optimization", price: "Subscription", note: "Selected by Microsoft Azure AI", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Schneider/Motivair", model: "ChilledDoor3 RDHx", type: "Rear-Door HX", status: "Available", power: "75 kW/rack", cooling: "Rear-door liquid", price: "Varies", note: "Post-acquisition; hybrid retrofit", news: "[DRIL Sao Paulo] Nov 9: Digital Realty/Ascenty open a liquid-cooling AI test lab in Sao Paulo for 150 kW+ racks -- validation demand for high-density cooling." },
+      { vendor: "CoolIT Systems", model: "DLC Platform", type: "Direct Liquid", status: "Available", power: "Varies", cooling: "Cold plate + immersion", price: "Varies", note: "Eaton partnership", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Wiwynn", model: "Two-Phase Immersion", type: "Full Immersion", status: "Deploying", power: "Ultra-high", cooling: "Immersion", price: "Custom", note: "OCP-aligned; hyperscaler-preferred", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Asetek", model: "AI Cooling Suite", type: "DLC / CDU", status: "Available", power: "Varies", cooling: "Direct-to-chip", price: "Varies", note: "Established DLC pioneer", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Rittal", model: "LCP DX / Blue e+", type: "Precision Cooling", status: "Available", power: "Up to 60 kW/rack", cooling: "Air / Hybrid", price: "Mid-range", note: "European market leader; modular enclosures", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "STULZ", model: "CyberAir 3PRO DX", type: "Precision Air Cooling", status: "Available", power: "Up to 200 kW", cooling: "Air (variable speed)", price: "Mid-range", note: "German engineering; 50+ years DC cooling", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Delta Electronics", model: "InfraSuite", type: "Precision Cooling + CDU", status: "Available", power: "Varies", cooling: "Air / Liquid", price: "Mid-range", note: "Taiwan; integrated DC infra (power + cooling + mgmt)", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Green Revolution Cooling", model: "ICEraQ Series", type: "Single-Phase Immersion", status: "Available", power: "100+ kW/rack", cooling: "Immersion", price: "Custom", note: "US-based immersion cooling specialist", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "LiquidStack", model: "DataTank", type: "Two-Phase Immersion", status: "Available", power: "Ultra-high", cooling: "Full immersion", price: "Custom", note: "Formerly Allied Control; precision immersion", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Submer", model: "SmartPod XL", type: "Immersion Cooling Pod", status: "Available", power: "Up to 250 kW", cooling: "Single-phase immersion", price: "Custom", note: "Spanish startup; containerized immersion pods", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Iceotope", model: "KUL AI", type: "Precision Liquid Cooling", status: "Available", power: "8-GPU server", cooling: "Chassis-level immersion", price: "Custom", note: "UK-manufactured (Sheffield); sealed chassis; near-zero water; 96% water savings vs air", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "AirTrunk", model: "Recycled-Water Cooling (JHB3/JHB4)", type: "Campus Cooling Design", status: "Deploying", power: "Campus-scale", cooling: "Recycled-water", price: "Operator-internal", note: "Malaysia Johor two-campus build; purpose-built for high-density cloud + AI workloads", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." }
+    ]
+  },
+  {
+    category: "Storage & Data",
+    items: [
+      { vendor: "NetApp", model: "AI Data Engine (AIDE)", type: "AI Data Software", status: "Announced", power: "N/A", cooling: "N/A", price: "Software", note: "NVIDIA co-engineered; metadata indexing", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Everpure", model: "FlashBlade//EXA", type: "AI Storage", status: "Available", power: "Varies", cooling: "Air", price: "STaaS", note: "Highest-end AI storage; Evergreen//One", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Everpure", model: "Data Stream", type: "Auto Data Pipeline", status: "Beta H2 2026", power: "N/A", cooling: "N/A", price: "TBD", note: "Continuous GPU feed; no manual mgmt", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "VAST Data", model: "AI Blueprint Pipelines", type: "Open-Source", status: "Available", power: "N/A", cooling: "N/A", price: "Free / OSS", note: "Pre-built NVIDIA AI Blueprint implementations", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "DDN (DataDirect)", model: "AI400X2 / EXAScaler", type: "AI Parallel Storage", status: "Available", power: "Varies", cooling: "Air", price: "Enterprise", note: "HPC/AI parallel file system; Lustre-based", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Hitachi Vantara", model: "VSP One Block", type: "Enterprise Storage", status: "Available", power: "Varies", cooling: "Air", price: "Premium", note: "Mission-critical; hybrid cloud data services", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Infinidat", model: "InfiniBox SSA II", type: "Enterprise SAN", status: "Available", power: "Varies", cooling: "Air", price: "Enterprise", note: "Petabyte-scale; 100% availability guarantee", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Nimbus Data", model: "ExaDrive DC", type: "100TB+ SSD", status: "Available", power: "Low per TB", cooling: "N/A", price: "$/TB leader", note: "World's largest SSD; extreme density per U", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Sunbird", model: "dcTrack / Power IQ", type: "DCIM Software", status: "Available", power: "N/A", cooling: "N/A", price: "Subscription", note: "Asset + capacity management (dcTrack) + PDU-level power monitoring (Power IQ); automated PUE reporting", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Nlyte", model: "DCIM Platform", type: "DCIM Software", status: "Available", power: "N/A", cooling: "N/A", price: "Enterprise", note: "ML-assisted power prediction; ServiceNow/CMDB native integration; PUE + DCiE + utilization correlation", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Panduit", model: "SmartZone / Cable Mgmt", type: "DC Infrastructure", status: "Available", power: "N/A", cooling: "N/A", price: "Mid-range", note: "Intelligent rack PDUs (SmartZone G5); structured cabling; hot/cold aisle containment; fiber solutions", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." }
+    ]
+  },
+  {
+    category: "Power & UPS",
+    items: [
+      { vendor: "Vertiv", model: "Liebert APM2", type: "Modular UPS", status: "Available", power: "Scalable", cooling: "Integrated", price: "Varies", note: "Part of MegaMod HDX; hot-swap", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Schneider", model: "Galaxy VX / VL", type: "3-Phase UPS", status: "Available", power: "Up to 1,500 kW", cooling: "Integrated", price: "Enterprise", note: "Standard for Tier III/IV", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Eaton", model: "9395P UPS", type: "UPS System", status: "Available", power: "Up to 1,200 kW", cooling: "Integrated", price: "Enterprise", note: "High-efficiency; paralleling", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Baker Hughes", model: "Gas Turbine Portfolio", type: "On-Site Power", status: "Orders 2×", power: "Multi-MW", cooling: "N/A", price: "$3B order target", note: "Behind-the-meter DC prime power", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Cummins", model: "QSK95 / HSK78G", type: "Backup Generator", status: "Available", power: "Up to 3.5 MW", cooling: "N/A", price: "Enterprise", note: "Diesel + gas generator sets for DC backup", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Caterpillar", model: "Cat C175-20 / MG Series", type: "Prime Power Generator", status: "Available", power: "Up to 6 MW", cooling: "N/A", price: "Custom", note: "Prime + standby power for large-scale DCs", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "ABB", model: "MegaFlex / DPA UPScale", type: "Modular UPS", status: "Available", power: "Up to 6 MW", cooling: "Integrated", price: "Enterprise", note: "Modular scalability; global DC footprint", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Delta Electronics", model: "Ultron HPH / DPH", type: "3-Phase UPS", status: "Available", power: "Up to 1.2 MW", cooling: "Integrated", price: "Mid-range", note: "Taiwan; cost-effective UPS for Tier II/III", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Bloom Energy", model: "Energy Server (SOFC)", type: "Fuel Cell / Prime Power", status: "Deploying", power: "200 kW modules", cooling: "N/A", price: "PPA / Custom", note: "Solid oxide fuel cell; behind-the-meter DC power", news: "[24/7 Bloom vs GE Vernova] Nov 9: on-site power 'duel' -- Bloom fuel cells vs GE Vernova turbines for AI DCs. [Torus BW] Nov 11: Torus Foundry pairs modular DCs with flywheel-battery storage behind the meter. [Microsoft power pledge] Nov 11: Microsoft pledges to pay its own way for DC power." },
+      { vendor: "Kohler / SDMO", model: "KD Series Generators", type: "Standby Generator", status: "Available", power: "Up to 4 MW", cooling: "N/A", price: "Enterprise", note: "Diesel standby; rapid start for DC backup", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "ZincFive", model: "BC 2 AI / NiZn Retrofit Kit", type: "NiZn Battery Cabinet", status: "Available", power: "280-325 kWb", cooling: "N/A", price: "Custom", note: "Oregon; AI-optimized 90Ah NiZn; 800A max discharge; no thermal runaway; 15-yr life; 1GW+ deployed", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Legrand/Raritan", model: "PRO4X / PX4 Rack PDU", type: "Intelligent Rack PDU", status: "Available", power: "Up to 400V 3-phase", cooling: "N/A", price: "Mid-range", note: "First PDU with THD + waveform capture at outlet level; HDOT Cx outlets; circuit breaker trip forensics", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Starline (Legrand)", model: "Track Busway / M70 CPM", type: "Overhead Power Distribution", status: "Available", power: "40-1,250A / 600V AC/DC", cooling: "N/A", price: "Enterprise", note: "Overhead busway eliminates floor cable clutter; hot-tap without power interruption; M70 revenue-grade metering", news: "No vendor-specific news captured for WK-46 (Nov 9-15, 2026)." },
+      { vendor: "Bosch Rexroth", model: "Sytronix SvP / SvE Variable-Speed Drives", type: "Variable-Speed Pump / Servo Drive", status: "Available", power: "Energy-on-demand (load-following)", cooling: "N/A (drive system)", price: "Mid-range industrial", note: "DC mechanical services: cooling-loop pumps, generator support, hydraulic actuators; up to -20 dB(A) noise; condition monitoring; full Multi-Ethernet (Sercos/PROFINET/EtherCAT/EtherNet/IP)", news: "[Rexroth ctrlX IPC electronica] No Sytronix-specific news Nov 9-15. Rexroth listed its ctrlX IPC (PR4) for electronica Munich (Nov 10-13, Hall C2/353). [Rexroth SPS 2026] Next show: SPS Nuremberg Nov 24-26 (Hall 7/450) -- Agent iXi AI agent, ctrlX additions. [Statnett pause] Grid and water limits this week (Statnett pause, Batam water protests, Tungkillo pause) keep variable-speed cooling pumps relevant to DC approvals." }
+    ]
+  }
+];
+const REGIONS = [
+  {
+    region: "North America", flag: "🌎", size: "$120B+ (2026 est.)", sizeUrl: "https://brightlio.com/data-center-stats/", metric: "OpenAI RICO suit; CoreWeave $3.66bn; PJM $29.4bn DC cost; 3 new moratoria", metricUrl: "https://thecurrentga.org/2026/11/09/new-lawsuit-alleges-conspiracy-in-effingham-county-openai-land-sale/",
+    items: [
+      { rank: 1, headline: "Residents file civil RICO suit vs OpenAI and Effingham County officials over Project Camellia land sale (Nov 9)", impact: "Critical", cat: "Legal", url: "https://thecurrentga.org/2026/11/09/new-lawsuit-alleges-conspiracy-in-effingham-county-openai-land-sale/" },
+      { rank: 2, headline: "CoreWeave Q3: revenue $3.66bn (+168%), backlog ~$132.5bn, capex $14.5bn (Nov 10)", impact: "Critical", cat: "Compute", url: "https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Third-Quarter-2026-Results/" },
+      { rank: 3, headline: "PJM market monitor: DC load added $29.4bn to capacity costs (Nov 12)", impact: "Critical", cat: "Energy", url: "https://www.morningstar.com/news/pr-newswire/20261112ph96438/market-monitor-finds-pjm-wholesale-electricity-markets-competitive" },
+      { rank: 4, headline: "SpaceX plans $24bn South Texas DC with on-site gas, sidestepping Brownsville moratorium (Nov 10)", impact: "High", cat: "Risk", url: "https://www.ksat.com/news/texas/2026/11/10/spacex-to-build-24-billion-data-center-in-south-texas-sidestepping-moratorium/" },
+      { rank: 5, headline: "Kraft Group proposes $16bn, 900 MW Sutton MA campus; residents push back (Nov 10/14)", impact: "High", cat: "Community", url: "https://www.bostonglobe.com/2026/11/10/business/kraft-group-data-centers-sutton-mass/" },
+      { rank: 6, headline: "Moratoria: Henderson NC (6 mo), Edmond OK (to Jun 2027), Center Point IA (12 mo); McHenry County IL considers one", impact: "High", cat: "Regulation", url: "https://nondoc.com/2026/11/10/edmond-council-fires-city-attorney-extends-data-center-moratorium/" },
+      { rank: 7, headline: "Torus raises $500M, launches Foundry prefab AI DCs with flywheel storage (Nov 11)", impact: "High", cat: "Power", url: "https://www.bloomberg.com/news/articles/2026-11-11/utah-based-startup-raises-500-million-for-modular-ai-data-center" },
+      { rank: 8, headline: "PPL pipeline hits 35 GW; ~2 GW supply terms for QTS Salem Township", impact: "High", cat: "Energy", url: "https://www.datacenterdynamics.com/en/news/ppl-advanced-stage-data-center-pipeline-hits-35gw-in-pennsylvania/" },
+      { rank: 9, headline: "Integra $8bn building at 756 MW Quanah TX campus; Fluidstack breaks ground in Wythe County VA (Nov 10)", impact: "High", cat: "Construction", url: "https://www.datacenterdynamics.com/en/news/application-filed-for-8bn-data-center-project-in-quanah-texas/" },
+      { rank: 10, headline: "Microsoft pledges to pay its own way for DC power (Nov 11)", impact: "High", cat: "Policy", url: "https://www.bloomberg.com/news/articles/2026-11-11/microsoft-vows-to-pay-its-own-way-to-power-data-centers" }
+    ]
+  },
+  {
+    region: "Europe", flag: "🇪🇺", size: "€150B+ (2026 est.)", sizeUrl: "https://www.eudca.org/new-2026-state-of-european-data-centres", metric: "Google London outage cause; Cardiff call-in; Statnett pause; Milan protest", metricUrl: "https://www.datacenterdynamics.com/en/news/googles-uk-data-center-disruption-caused-by-misconfiguration-of-systems/",
+    items: [
+      { rank: 1, headline: "UK RISK: Google blames PLC misconfiguration for London-zone outage -- generators failed to start (Nov 9)", impact: "Critical", cat: "Risk", url: "https://www.datacenterdynamics.com/en/news/googles-uk-data-center-disruption-caused-by-misconfiguration-of-systems/" },
+      { rank: 2, headline: "UK: Welsh Government calls in contested Cardiff East DC after record objections (Nov 11)", impact: "High", cat: "Regulation", url: "https://nation.cymru/news/huge-data-centre-planned-for-cardiff-called-in-by-welsh-government/" },
+      { rank: 3, headline: "UK: 6,000+ march in Edinburgh against hyperscale AI DCs (Nov 14)", impact: "High", cat: "Community", url: "https://foe.scot/press-release/thousands-march-to-stop-ai-data-centres/" },
+      { rank: 4, headline: "UK: Fractile raises $720M at ~$7bn; UK Sovereign AI Fund participates (Nov 11)", impact: "High", cat: "Compute", url: "https://techcrunch.com/2026/11/11/with-720m-round-britains-fractile-gets-a-leg-up-in-the-race-for-ai-chips/" },
+      { rank: 5, headline: "UK: DC count forecast to rise ~30% to 785 in 2027 (Search Acumen, Nov 11)", impact: "High", cat: "Market", url: "https://www.propertyweek.com/news/676610" },
+      { rank: 6, headline: "UK: up-to-£180m competition to host next national AI supercomputer", impact: "High", cat: "Policy", url: "https://datacentrereview.com/2026/11/uk-government-offers-180m-for-ai-data-centre-but-theres-a-catch/" },
+      { rank: 7, headline: "NORWAY RISK: Statnett pauses new DC grid reservations to at least Aug 2027 (Nov 10)", impact: "Critical", cat: "Energy", url: "https://www.nordiskpost.com/2026/11/10/norway-data-centres-grid-reservations-pause/" },
+      { rank: 8, headline: "ITALY RISK: thousands protest in Milan; 60+ Lombardy applications seek ~11 GW (Nov 10)", impact: "High", cat: "Community", url: "https://www.datacenterdynamics.com/en/news/thousands-oppose-data-center-expansion-in-italy-gather-in-milan-for-protest/" },
+      { rank: 9, headline: "GERMANY: Colt breaks ground on 54 MW Berlin; Deutsche Telekom +20 MW Munich (Nov 10)", impact: "High", cat: "Construction", url: "https://www.datacenterdynamics.com/en/news/colt-breaks-ground-on-data-center-in-berlin-germany/" },
+      { rank: 10, headline: "NORWAY: DC licensing regime planned, prioritising critical uses (Nov 9)", impact: "High", cat: "Regulation", url: "https://www.thelocal.no/20261109/norway-to-back-data-centres-that-we-really-need" }
+    ]
+  },
+  {
+    region: "Asia-Pacific", flag: "🌏", size: "$95B+ (2026 est.)", sizeUrl: "https://www.cushmanwakefield.com/en/singapore/insights/apac-data-centre-update", metric: "SoftBank-Grab-PETROS $1.85bn; NEXTDC + Tungkillo pauses; Equinix SG6", metricUrl: "https://group.softbank/en/news/press/20261109_0",
+    items: [
+      { rank: 1, headline: "MALAYSIA: SoftBank, Grab, PETROS sign JDAs -- $1.85bn seed, 5 GW+ long-term (Nov 9)", impact: "Critical", cat: "Investment", url: "https://group.softbank/en/news/press/20261109_0" },
+      { rank: 2, headline: "AUSTRALIA RISK: NEXTDC halts uncontracted projects after M3 power delays (Nov 9)", impact: "Critical", cat: "Risk", url: "https://theedgemalaysia.com/node/825054" },
+      { rank: 3, headline: "AUSTRALIA RISK: Quantum DC pauses 1.2 GW Tungkillo hub after community opposition (Nov 12)", impact: "High", cat: "Community", url: "https://www.energyconnects.com/news/utilities/2026/november/another-data-center-halts-in-australia-as-public-backlash-rises/" },
+      { rank: 4, headline: "SINGAPORE: Equinix opens $290M AI-ready SG6 (Nov 9)", impact: "High", cat: "Construction", url: "https://technode.global/2026/11/09/equinix-opens-sg6-data-center-singapore/" },
+      { rank: 5, headline: "THAILAND: Haoyang secures $590M loan for EEC hyperscale AI DC (Nov 9)", impact: "High", cat: "Investment", url: "https://technode.global/2026/11/09/haoyang-thailand-data-center-loan/" },
+      { rank: 6, headline: "INDONESIA RISK: power and water pledged for Batam DCs amid water-shortage protests (Nov 12)", impact: "High", cat: "Risk", url: "https://en.antaranews.com/news/442011/indonesia-secures-power-water-supplies-for-batam-data-centers" },
+      { rank: 7, headline: "KOREA: SK hynix HBM4 yield reportedly >70% as Samsung expands packaging (Nov 13)", impact: "High", cat: "Memory", url: "https://www.digitimes.com/news/a20261113VL217/sk-hynix-hbm4-production-packaging-samsung.html" },
+      { rank: 8, headline: "CHINA RISK: export-banned NVIDIA chips reportedly behind China's top AI models (Nov 13)", impact: "High", cat: "Risk", url: "https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/" },
+      { rank: 9, headline: "BRAZIL: Cerebras reportedly leases 30 MW+ in Greater Sao Paulo (Nov 13)", impact: "High", cat: "Compute", url: "https://www.bnamericas.com/en/features/ai-giant-and-nvidia-rival-cerebras-readies-latin-america-launch--behind-the-plans" },
+      { rank: 10, headline: "BRAZIL: Digital Realty opens liquid-cooling AI lab for 150 kW+ racks (Nov 9)", impact: "Watch", cat: "Cooling", url: "https://www.datacenterdynamics.com/en/news/digital-realty-launches-liquid-cooling-lab-in-s%C3%A3o-paulo-brazil/" }
+    ]
+  },
+  {
+    region: "Middle East & Africa", flag: "🌍", size: "$30B+ (2026 est.)", sizeUrl: "https://www.globaldata.com/store/report/gcc-data-centre-projects-market-analysis/", metric: "Syntys 20 MW Qatar; HUMAIN SAR2.5bn; Oman 400 MW; Egypt $750M", metricUrl: "https://www.datacenterdynamics.com/en/news/syntys-breaks-ground-on-20mw-data-center-in-qatar/",
+    items: [
+      { rank: 1, headline: "QATAR: Syntys (Ooredoo) breaks ground on 20 MW AI/HPC data centre (Nov 12)", impact: "Critical", cat: "Construction", url: "https://www.datacenterdynamics.com/en/news/syntys-breaks-ground-on-20mw-data-center-in-qatar/" },
+      { rank: 2, headline: "SAUDI: HUMAIN signs SAR2.5bn (~$667M) GPU + grid financing with National Infrastructure Fund (Nov 10)", impact: "Critical", cat: "Investment", url: "https://enterpriseam.com/ai/2026/11/10/humains-getting-a-big-cash-infusion-from-the-saudi-national-infrastructure-fund/" },
+      { rank: 3, headline: "UAE: DAMAC targets 10 GW pipeline; development costs up ~30% (Nov 12)", impact: "High", cat: "Risk", url: "https://www.middleeastainews.com/p/damac-targets-10gw-of-data-centres" },
+      { rank: 4, headline: "OMAN: $3bn, up-to-400 MW Salalah AI campus planned; Crusoe interest non-binding (Nov 11)", impact: "High", cat: "Hyperscale", url: "https://bebeez.eu/2026/11/11/consortium-to-develop-400mw-hyperscale-ai-data-center-in-oman/" },
+      { rank: 5, headline: "EGYPT: Magnom + ALG sign $750M DC deal at Forbes International Tower (Nov 14)", impact: "High", cat: "Investment", url: "https://meobserver.news/technology/2026/11/14/forbes-tower-signs-us-data-centre-deal-as-egypt-accelerates-digital-investment/" },
+      { rank: 6, headline: "AFRICA: Vodacom names SA and Kenya as next AI DC hubs after $1bn Egypt (Nov 10)", impact: "High", cat: "Hyperscale", url: "https://techcentral.co.za/vodacom-ai-data-centre-hubs-south-africa-kenya-egypt/288232/" },
+      { rank: 7, headline: "KENYA: Stanbic, Huawei, CRBC explore DC + solar partnerships (Nov 13)", impact: "Watch", cat: "Investment", url: "https://techafricanews.com/2026/11/13/stanbic-bank-kenya-huawei-explore-data-centre-and-digital-infrastructure-partnerships/" },
+      { rank: 8, headline: "UGANDA: Workonline extends network into Raxio Kampala (Nov 12)", impact: "Watch", cat: "Connectivity", url: "https://www.raxiogroup.com/" },
+      { rank: 9, headline: "GHANA: Ghana-US explore DC and cloud investment incl. AWS (Nov 9)", impact: "Watch", cat: "Investment", url: "https://techafricanews.com/2026/11/09/ghana-and-us-explore-digital-investment-partnerships-in-data-centres-and-cloud-infrastructure/" }
+    ]
+  }
+];
+const MARKET_STATS = [
+  { label: "CoreWeave Q3 revenue", value: "$3.66bn", delta: "+168% y/y", source: "CoreWeave IR", url: "https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Third-Quarter-2026-Results/" },
+  { label: "CoreWeave backlog", value: "~$132.5bn", delta: "from $104bn in June", source: "TradingKey", url: "https://www.tradingkey.com/analysis/stocks/us-stocks/262299527-coreweave-earnings-report-q3-revenue-growth-backlog-capital-expenditures-net-loss-tradingkey" },
+  { label: "CoreWeave active power", value: "1.7 GW+", delta: "Q3 capex $14.5bn", source: "CoreWeave IR", url: "https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Third-Quarter-2026-Results/" },
+  { label: "Cerebras Q4 revenue guide", value: "~$320M", delta: "vs $271.2M consensus", source: "Bloomberg", url: "https://www.bloomberg.com/news/articles/2026-11-12/cerebras-delivers-solid-outlook-in-its-bid-to-challenge-nvidia" },
+  { label: "Cerebras contracted capacity", value: "~700 MW", delta: "hyperscaler wins", source: "Money Morning", url: "https://moneymorning.com/2026/11/13/cerebras-raises-outlook-hyperscaler-wins-november-2026" },
+  { label: "Torus Foundry raise", value: "$500M", delta: "1-20 MW units; 12-16 wks to operate", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/energy-storage-firm-torus-launches-prefabricated-modular-data-center-product-raises-500m/" },
+  { label: "Fractile Series C", value: "$720M", delta: "~$7bn valuation", source: "TechCrunch", url: "https://techcrunch.com/2026/11/11/with-720m-round-britains-fractile-gets-a-leg-up-in-the-race-for-ai-chips/" },
+  { label: "SK hynix HBM4 yield", value: ">70%", delta: "reported (Chosun Biz)", source: "DigiTimes", url: "https://www.digitimes.com/news/a20261113VL217/sk-hynix-hbm4-production-packaging-samsung.html" },
+  { label: "PC DRAM contract price 4Q26", value: "+13-18% q/q", delta: "from +18-23% in 3Q26", source: "TrendForce via Crypto Briefing", url: "https://cryptobriefing.com/trendforce-pc-dram-prices-rise-4q26/" },
+  { label: "Qualcomm Dec-qtr DC revenue guide", value: "> $650M", delta: "reference: Nov 4 results", source: "GuruFocus", url: "https://www.gurufocus.com/news/9172752/qualcomm-inc-qcom-q4-2026-earnings-call-highlights-record-automotive-and-data-center-ramp-offset-handset-headwinds" },
+  { label: "Qualcomm WARN layoffs (CA)", value: "442 + 75+", delta: "separations Jan 2027", source: "Yahoo Finance", url: "https://finance.yahoo.com/markets/stocks/articles/qualcomm-laying-off-over-500-065542937.html" },
+  { label: "QCOM price target (Freedom Broker)", value: "$185", delta: "from $200; Buy to Hold", source: "GuruFocus", url: "https://www.gurufocus.com/news/9185898/qcom-downgraded-by-freedom-broker-price-target-lowered-to-185" },
+  { label: "PJM capacity cost from DC load", value: "$29.4bn", delta: "IMM estimate", source: "PJM IMM", url: "https://www.morningstar.com/news/pr-newswire/20261112ph96438/market-monitor-finds-pjm-wholesale-electricity-markets-competitive" },
+  { label: "SpaceX South Texas DC", value: "$24bn", delta: "444 acres de-annexed", source: "KSAT", url: "https://www.ksat.com/news/texas/2026/11/10/spacex-to-build-24-billion-data-center-in-south-texas-sidestepping-moratorium/" },
+  { label: "Kraft Sutton campus", value: "900 MW / $16bn", delta: "first buildings 2029", source: "Boston Globe", url: "https://www.bostonglobe.com/2026/11/10/business/kraft-group-data-centers-sutton-mass/" },
+  { label: "Integra Quanah building", value: "$8bn", delta: "756 MW campus", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/application-filed-for-8bn-data-center-project-in-quanah-texas/" },
+  { label: "PPL PA advanced pipeline", value: "35 GW", delta: "~2 GW to QTS", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/ppl-advanced-stage-data-center-pipeline-hits-35gw-in-pennsylvania/" },
+  { label: "UK DC count 2027 (forecast)", value: "785", delta: "from 602 (+30%)", source: "Property Week", url: "https://www.propertyweek.com/news/676610" },
+  { label: "UK AI supercomputer host competition", value: "up to £180m", delta: "AIRR", source: "DC Review", url: "https://datacentrereview.com/2026/11/uk-government-offers-180m-for-ai-data-centre-but-theres-a-catch/" },
+  { label: "Statnett DC reservations", value: "4.2 GW reserved / 9.1 GW queued", delta: "new reservations paused", source: "Nordisk Post", url: "https://www.nordiskpost.com/2026/11/10/norway-data-centres-grid-reservations-pause/" },
+  { label: "Lombardy DC applications", value: "60+ (~11 GW)", delta: "protest in Milan", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/thousands-oppose-data-center-expansion-in-italy-gather-in-milan-for-protest/" },
+  { label: "Colt Berlin", value: "54 MW", delta: "Berlin 1 live end-2028", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/colt-breaks-ground-on-data-center-in-berlin-germany/" },
+  { label: "Syntys Qatar AI/HPC DC", value: "20 MW", delta: "groundbreaking Nov 12", source: "DCD", url: "https://www.datacenterdynamics.com/en/news/syntys-breaks-ground-on-20mw-data-center-in-qatar/" },
+  { label: "HUMAIN financing", value: "SAR2.5bn (~$667M)", delta: "GPUs + grid", source: "Enterprise AM", url: "https://enterpriseam.com/ai/2026/11/10/humains-getting-a-big-cash-infusion-from-the-saudi-national-infrastructure-fund/" },
+  { label: "DAMAC pipeline target", value: "10 GW by end-2027", delta: "costs up ~30%", source: "Middle East AI News", url: "https://www.middleeastainews.com/p/damac-targets-10gw-of-data-centres" },
+  { label: "Oman Salalah AI campus", value: "up to 400 MW / $3bn", delta: "Crusoe non-binding", source: "BeBeez", url: "https://bebeez.eu/2026/11/11/consortium-to-develop-400mw-hyperscale-ai-data-center-in-oman/" },
+  { label: "SoftBank-Grab-PETROS seed capital", value: "$1.85bn", delta: "5 GW+ long-term", source: "SoftBank", url: "https://group.softbank/en/news/press/20261109_0" },
+  { label: "Equinix SG6", value: "$290M / 20 MW", delta: "opened Nov 9", source: "TNGlobal", url: "https://technode.global/2026/11/09/equinix-opens-sg6-data-center-singapore/" },
+  { label: "Haoyang EEC loan", value: "$590M", delta: "7-year, Bangkok Bank", source: "TNGlobal", url: "https://technode.global/2026/11/09/haoyang-thailand-data-center-loan/" },
+  { label: "Tungkillo hub", value: "1.2 GW", delta: "approvals paused", source: "Energy Connects", url: "https://www.energyconnects.com/news/utilities/2026/november/another-data-center-halts-in-australia-as-public-backlash-rises/" },
+  { label: "Egypt Forbes Tower DC", value: "$750M", delta: "Magnom + ALG", source: "ME Observer", url: "https://meobserver.news/technology/2026/11/14/forbes-tower-signs-us-data-centre-deal-as-egypt-accelerates-digital-investment/" },
+  { label: "Edinburgh anti-DC march", value: "6,000+", delta: "Nov 14", source: "FoE Scotland", url: "https://foe.scot/press-release/thousands-march-to-stop-ai-data-centres/" },
+];
+const IC = {
+  Critical: { bg: "#FEE2E220", text: "#EF4444", border: "#EF444444" },
+  High: { bg: "#FFF7ED18", text: "#EA580C", border: "#EA580C44" },
+  Moderate: { bg: "#FFFBEB16", text: "#CA8A04", border: "#CA8A0444" },
+  Watch: { bg: "#ECFEFF18", text: "#06B6D4", border: "#06B6D444" },
+};
+
+const CC = { Compute:"#6366F1","Supply Chain":"#EF4444",Investment:"#10B981",Cooling:"#06B6D4",Construction:"#EA580C",Regulation:"#D97706",Software:"#7C3AED","M&A":"#DB2777",Market:"#10B981",Energy:"#D97706",Connectivity:"#117ACA",Innovation:"#9333EA",Hyperscale:"#6366F1",Policy:"#D97706",Trade:"#EF4444",Edge:"#06B6D4",Events:"#64748B",Risk:"#DC2626",Community:"#059669",Legal:"#7C3AED" };
+
+
+const IC_MAP = {Critical:{bg:"#FEE2E220",text:"#EF4444",border:"#EF444444"},High:{bg:"#FFF7ED18",text:"#EA580C",border:"#EA580C44"},Moderate:{bg:"#FFFBEB16",text:"#CA8A04",border:"#CA8A0444"},Watch:{bg:"#ECFEFF18",text:"#06B6D4",border:"#06B6D444"}};
+const CC_MAP = {Compute:"#6366F1","Supply Chain":"#EF4444",Investment:"#10B981",Cooling:"#06B6D4",Construction:"#EA580C",Regulation:"#D97706",Software:"#7C3AED","M&A":"#DB2777",Market:"#10B981",Energy:"#D97706",Connectivity:"#117ACA",Innovation:"#9333EA",Hyperscale:"#6366F1",Policy:"#D97706",Trade:"#EF4444",Edge:"#06B6D4",Events:"#64748B",Risk:"#DC2626",Community:"#059669",Legal:"#7C3AED"};
+
+const ALL_SOURCES = [
+  {n:"Yahoo Amon interview",u:"https://finance.yahoo.com/technology/article/qualcomm-ceo-on-tech-stock-meltdown-there-is-no-ai-correction-for-us-142155683.html"},
+  {n:"24/7 Qualcomm shortage",u:"https://247wallst.com/investing/2026/11/13/qualcomms-ceo-says-chipmakers-are-in-an-extreme-shortage/"},
+  {n:"Trefis Qualcomm",u:"https://www.trefis.com/stock/qcom/articles/625015/your-qualcomm-stock-thesis-has-one-loose-end/2026-11-13"},
+  {n:"Yahoo Qualcomm WARN",u:"https://finance.yahoo.com/markets/stocks/articles/qualcomm-laying-off-over-500-065542937.html"},
+  {n:"GuruFocus QCOM downgrade",u:"https://www.gurufocus.com/news/9185898/qcom-downgraded-by-freedom-broker-price-target-lowered-to-185"},
+  {n:"Qualcomm FQ4 8-K (Nov 4)",u:"https://www.sec.gov/Archives/edgar/data/0000804328/000080432826000127/qcom092726erex991.htm"},
+  {n:"GuruFocus Qualcomm FQ4 call",u:"https://www.gurufocus.com/news/9172752/qualcomm-inc-qcom-q4-2026-earnings-call-highlights-record-automotive-and-data-center-ramp-offset-handset-headwinds"},
+  {n:"Benzinga QCOM Nov 13",u:"https://www.benzinga.com/markets/tech/26/11/63247639/whats-going-on-with-qualcomm-stock-friday"},
+  {n:"DirectIndustry Rexroth ctrlX IPC",u:"https://www.directindustry.com/prod/bosch-rexroth-electric-drives-controls/product-5465-2111733.html"},
+  {n:"GlobalSpec Rexroth SPS 2026",u:"https://insights.globalspec.com/article/25250/bosch-rexroth-brings-agentic-ai-humanoid-robotics-to-sps-2026?from_rss=1"},
+  {n:"electronica 2026",u:"https://www.bosch-semiconductors.com/events/electronica-munich.html"},
+  {n:"SC26 Chicago",u:"https://technologyconference.com/sc26-supercomputing-2026-november-15-20-mccormick-place-chicago/"},
+  {n:"NVIDIA at SC26",u:"https://www.nvidia.com/en-us/events/supercomputing/"},
+  {n:"TradingKey CoreWeave",u:"https://www.tradingkey.com/analysis/stocks/us-stocks/262299527-coreweave-earnings-report-q3-revenue-growth-backlog-capital-expenditures-net-loss-tradingkey"},
+  {n:"DCD Torus Foundry",u:"https://www.datacenterdynamics.com/en/news/energy-storage-firm-torus-launches-prefabricated-modular-data-center-product-raises-500m/"},
+  {n:"Business Wire Torus",u:"https://www.morningstar.com/news/business-wire/20261111907147/torus-launches-modular-ai-infrastructure-foundry-to-meet-surging-ai-inference-demand-and-secures-500m-in-funding"},
+  {n:"SiliconANGLE Fractile",u:"https://siliconangle.com/2026/11/11/inference-chip-developer-fractile-raises-720m-in-funding/"},
+  {n:"Money Morning Cerebras",u:"https://moneymorning.com/2026/11/13/cerebras-raises-outlook-hyperscaler-wins-november-2026"},
+  {n:"DigiTimes SK hynix HBM4",u:"https://www.digitimes.com/news/a20261113VL217/sk-hynix-hbm4-production-packaging-samsung.html"},
+  {n:"TrendForce DRAM via Crypto Briefing",u:"https://cryptobriefing.com/trendforce-pc-dram-prices-rise-4q26/"},
+  {n:"24/7 Bloom vs GE Vernova",u:"https://247wallst.com/investing/2026/11/09/the-on-site-power-duel-bloom-energy-vs-ge-vernova/"},
+  {n:"Bloomberg NVIDIA COP31",u:"https://www.bloomberg.com/news/articles/2026-11-11/nvidia-says-data-centers-should-be-an-asset-to-communities"},
+  {n:"Axios chip export controls",u:"https://www.axios.com/2026/11/11/trump-lutnick-nvidia-china-chip-export-controls"},
+  {n:"TechCrunch export-banned chips",u:"https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/"},
+  {n:"Brockovich",u:"https://www.brockovichdatacenter.com/"},
+  {n:"Project Camellia (OpenAI) -- RICO suit",u:"https://thecurrentga.org/2026/11/09/new-lawsuit-alleges-conspiracy-in-effingham-county-openai-land-sale/"},
+  {n:"CoreWeave Q3 2026 results",u:"https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Third-Quarter-2026-Results/"},
+  {n:"PPL pipeline / QTS Salem Township supply",u:"https://www.datacenterdynamics.com/en/news/ppl-advanced-stage-data-center-pipeline-hits-35gw-in-pennsylvania/"},
+  {n:"Integra Quanah campus",u:"https://www.datacenterdynamics.com/en/news/application-filed-for-8bn-data-center-project-in-quanah-texas/"},
+  {n:"Fluidstack Wythe County campus",u:"https://www.datacenterdynamics.com/en/news/fluidstack-begins-construction-of-99-acre-data-center-campus-in-wythe-county-virginia/"},
+  {n:"SpaceX South Texas DC + gas plant",u:"https://www.ksat.com/news/texas/2026/11/10/spacex-to-build-24-billion-data-center-in-south-texas-sidestepping-moratorium/"},
+  {n:"Kraft Group Sutton campus",u:"https://www.bostonglobe.com/2026/11/10/business/kraft-group-data-centers-sutton-mass/"},
+  {n:"Kraft Sutton -- local opposition",u:"https://www.bostonglobe.com/2026/11/14/business/kraft-data-center-sutton/"},
+  {n:"Jay former Androscoggin Mill DC",u:"https://www.nhpr.org/2026-11-09/former-jay-paper-mill-again-eyed-for-data-center"},
+  {n:"Henderson NC DC moratorium",u:"https://citizenportal.ai/articles/11996407/North-Carolina/Vance-County/Henderson-City/Henderson-council-enacts-six-month-moratorium-on-data-center-approvals"},
+  {n:"Edmond OK moratorium extension",u:"https://nondoc.com/2026/11/10/edmond-council-fires-city-attorney-extends-data-center-moratorium/"},
+  {n:"Center Point IA moratorium",u:"https://corridorbusiness.com/center-point-enacts-temporary-data-center-moratorium/"},
+  {n:"McHenry County moratorium proposal",u:"https://www.shawlocal.com/northwest-herald/2026/11/09/mchenry-county-board-to-take-up-data-center-moratorium/"},
+  {n:"Torus Foundry modular AI DCs",u:"https://www.bloomberg.com/news/articles/2026-11-11/utah-based-startup-raises-500-million-for-modular-ai-data-center"},
+  {n:"Google Botetourt County FOIA suit",u:"https://valawyersweekly.com/2026/11/11/foia-lawsuit-google-data-center-botetourt-county/"},
+  {n:"Microsoft DC power pledge",u:"https://www.bloomberg.com/news/articles/2026-11-11/microsoft-vows-to-pay-its-own-way-to-power-data-centers"},
+  {n:"Bethlehem Route 22 DC",u:"https://lehighdaily.com/bethlehem-planning-commission-approves-route-22-data-center-plan-5-0/"},
+  {n:"PJM market monitor -- DC load costs",u:"https://www.morningstar.com/news/pr-newswire/20261112ph96438/market-monitor-finds-pjm-wholesale-electricity-markets-competitive"},
+  {n:"AI DC debt -- rising borrowing costs",u:"https://qz.com/data-center-developers-borrowing-costs-ai-debt-110926"},
+  {n:"Cerebras outlook (700 MW contracted)",u:"https://www.bloomberg.com/news/articles/2026-11-12/cerebras-delivers-solid-outlook-in-its-bid-to-challenge-nvidia"},
+  {n:"Defra Andover colocation renewal",u:"https://www.datacenterdynamics.com/en/news/uks-defra-plans-48m-data-center-contract-renewal-with-atos/"},
+  {n:"Google Cloud London outage -- root cause",u:"https://www.datacenterdynamics.com/en/news/googles-uk-data-center-disruption-caused-by-misconfiguration-of-systems/"},
+  {n:"Cardiff East DC -- called in",u:"https://nation.cymru/news/huge-data-centre-planned-for-cardiff-called-in-by-welsh-government/"},
+  {n:"UK AIRR supercomputer host-site competition",u:"https://datacentrereview.com/2026/11/uk-government-offers-180m-for-ai-data-centre-but-theres-a-catch/"},
+  {n:"UK DC count forecast (Search Acumen)",u:"https://www.propertyweek.com/news/676610"},
+  {n:"Stop AI Data Centres march, Edinburgh",u:"https://foe.scot/press-release/thousands-march-to-stop-ai-data-centres/"},
+  {n:"Fractile Series C",u:"https://techcrunch.com/2026/11/11/with-720m-round-britains-fractile-gets-a-leg-up-in-the-race-for-ai-chips/"},
+  {n:"Norway DC licensing regime",u:"https://www.thelocal.no/20261109/norway-to-back-data-centres-that-we-really-need"},
+  {n:"Statnett DC grid reservation pause",u:"https://www.nordiskpost.com/2026/11/10/norway-data-centres-grid-reservations-pause/"},
+  {n:"Deutsche Telekom AI Factory, Tucherpark",u:"https://www.datacenterdynamics.com/en/news/germanys-deutsche-telekom-to-expand-munich-ai-data-center-by-20mw/"},
+  {n:"Colt Berlin 1 & 2",u:"https://www.datacenterdynamics.com/en/news/colt-breaks-ground-on-data-center-in-berlin-germany/"},
+  {n:"Milan anti-DC protest (Lombardy)",u:"https://www.datacenterdynamics.com/en/news/thousands-oppose-data-center-expansion-in-italy-gather-in-milan-for-protest/"},
+  {n:"Polarise AI DC expansion",u:"https://dataxconnect.com/weekly-data-centre-news-13th-november-2026/"},
+  {n:"Armada / Johnson Controls Dublin",u:"https://datacentremagazine.com/news/this-weeks-top-five-stories-in-the-data-centre-industry-14-11-26"},
+  {n:"Syntys 20 MW AI/HPC DC",u:"https://www.datacenterdynamics.com/en/news/syntys-breaks-ground-on-20mw-data-center-in-qatar/"},
+  {n:"HUMAIN GPU + grid financing",u:"https://enterpriseam.com/ai/2026/11/10/humains-getting-a-big-cash-infusion-from-the-saudi-national-infrastructure-fund/"},
+  {n:"DAMAC Digital 10 GW pipeline target",u:"https://www.middleeastainews.com/p/damac-targets-10gw-of-data-centres"},
+  {n:"Mubbadrah Salalah AI campus",u:"https://bebeez.eu/2026/11/11/consortium-to-develop-400mw-hyperscale-ai-data-center-in-oman/"},
+  {n:"Raxio Kampala -- Workonline extension",u:"https://www.raxiogroup.com/"},
+  {n:"Forbes International Tower DC",u:"https://meobserver.news/technology/2026/11/14/forbes-tower-signs-us-data-centre-deal-as-egypt-accelerates-digital-investment/"},
+  {n:"Ghana-US DC and cloud talks",u:"https://techafricanews.com/2026/11/09/ghana-and-us-explore-digital-investment-partnerships-in-data-centres-and-cloud-infrastructure/"},
+  {n:"Vodacom AI DC hubs (SA, Kenya)",u:"https://techcentral.co.za/vodacom-ai-data-centre-hubs-south-africa-kenya-egypt/288232/"},
+  {n:"Stanbic Kenya-Huawei DC talks",u:"https://techafricanews.com/2026/11/13/stanbic-bank-kenya-huawei-explore-data-centre-and-digital-infrastructure-partnerships/"},
+  {n:"SoftBank-Grab-PETROS Malaysia AI infra",u:"https://group.softbank/en/news/press/20261109_0"},
+  {n:"Equinix SG6",u:"https://technode.global/2026/11/09/equinix-opens-sg6-data-center-singapore/"},
+  {n:"Haoyang HYDC1 (Thailand EEC)",u:"https://technode.global/2026/11/09/haoyang-thailand-data-center-loan/"},
+  {n:"NEXTDC uncontracted pipeline paused",u:"https://theedgemalaysia.com/node/825054"},
+  {n:"Tungkillo Compute and Energy Hub",u:"https://www.energyconnects.com/news/utilities/2026/november/another-data-center-halts-in-australia-as-public-backlash-rises/"},
+  {n:"Nongsa Digital Park (Batam) power & water",u:"https://en.antaranews.com/news/442011/indonesia-secures-power-water-supplies-for-batam-data-centers"},
+  {n:"Cerebras Sao Paulo capacity lease",u:"https://www.bnamericas.com/en/features/ai-giant-and-nvidia-rival-cerebras-readies-latin-america-launch--behind-the-plans"},
+  {n:"Digital Realty DRIL Sao Paulo",u:"https://www.datacenterdynamics.com/en/news/digital-realty-launches-liquid-cooling-lab-in-s%C3%A3o-paulo-brazil/"}
+];
+
+const e = (t,a={},c='') => { const el=document.createElement(t); Object.entries(a).forEach(([k,v])=>{ if(k==='style'&&typeof v==='object') Object.assign(el.style,v); else if(k==='className') el.className=v; else el.setAttribute(k,v); }); if(typeof c==='string') el.innerHTML=c; else if(c instanceof HTMLElement) el.appendChild(c); else if(Array.isArray(c)) c.forEach(ch=>{ if(ch) el.appendChild(ch); }); return el; };
+
+const totalHW = HARDWARE_CATEGORIES.reduce((a,c)=>a+c.items.length,0);
+
+function badge(text,colors){ return `<span class="badge" style="background:${colors.bg};color:${colors.text};border:1px solid ${colors.border}">${text}</span>`; }
+function catBadge(cat){ const c=CC_MAP[cat]||"#888"; return `<span class="badge" style="background:${c}18;color:${c};border:1px solid ${c}33">${cat}</span>`; }
+function statusBadge(status){ const g=status.includes("Ship")||status==="Available"||status==="Deploying"||status==="Ramping"; const y=status.includes("2026")||status.includes("Soon")||status.includes("Beta")||status.includes("Orders"); const c=g?"#10B981":y?"#CA8A04":"#117ACA"; return `<span class="status-badge" style="background:${c}18;color:${c};border:1px solid ${c}40">${status}</span>`; }
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+let activeTab='overview', hwCat='all', regIdx=0;
+
+// News source tag → URL mapping for hardware catalog
+const NEWS_LINKS = {
+  "U.S. Commerce Dept":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "U.S. Export Controls":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "Reuters":"https://money.usnews.com/investing/news/articles/2026-03-05/nvidia-refocuses-tsmc-capacity-as-export-controls-stall-china-sales-ft-reports",
+  "NVIDIA GTC 2026":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "NVIDIA/Groq":"https://finance.yahoo.com/news/nvidia-launches-groq-3-ai-chip-and-cpu-server-aimed-at-intel-during-gtc-2026-200529139.html",
+  "CNBC":"https://www.cnbc.com/2026/04/29/aws-earnings-q1-2026.html",
+  "GTC 2026":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "IDC":"https://www.sdxcentral.com/news/server-market-explodes-61-as-storage-limps-along-idc/",
+  "ASHRAE TC 9.9":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "ASHRAE 90.4":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "ASHRAE":"https://tpc.ashrae.org/?cmtKey=fd4a4ee6-96a3-4f61-8b85-43418dfa988d",
+  "Azure Local":"https://blogs.nvidia.com/blog/gtc-2026-news/",
+  "Deloitte 2026 Outlook":"https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/hardware-consumer-tech-outlook.html",
+  "Deloitte 2026":"https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/hardware-consumer-tech-outlook.html",
+  "AMD Advancing AI":"https://www.datacenterdynamics.com/en/news/hpe-dell-lenovo-and-supermicro-detail-new-server-offerings-featuring-amds-new-mi325x-gpus-and-epyc-cpus/",
+  "650 Group":"https://slyd.com/resources/oem-comparison",
+  "Kavout":"https://www.kavout.com/market-lens/what-do-new-us-ai-chip-export-rules-mean-for-nvidia-and-broadcom",
+  "Ken Research":"https://www.kenresearch.com/china-data-center-server-market",
+  "Dell GTC 2026":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "Data Center Knowledge":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "Slyd Analysis":"https://slyd.com/resources/server-comparison",
+  "Slyd":"https://slyd.com/resources/server-comparison",
+  "HPE GTC 2026":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "HPE":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "HPE/Juniper":"https://www.datacenterknowledge.com/ai-data-centers/dell-hpe-and-others-unveil-ai-innovations-at-gtc-2026",
+  "SEC/DOJ":"https://thebrandhopper.com/brand/who-are-supermicros-top-competitors-in-technology-industry/",
+  "The Brand Hopper":"https://thebrandhopper.com/brand/who-are-supermicros-top-competitors-in-technology-industry/",
+  "Schneider":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "Grand View Research":"https://www.grandviewresearch.com/industry-analysis/data-center-liquid-cooling-market-report",
+  "OCP Foundation":"https://www.mordorintelligence.com/industry-reports/ocp-servers-market",
+  "OCP":"https://www.mordorintelligence.com/industry-reports/ocp-servers-market",
+  "DigiTimes":"https://www.globalsmt.net/world-news/data-centers-are-the-new-benchmark-according-to-new-report-from-digitimes-asia/",
+  "GlobalSMT":"https://www.globalsmt.net/world-news/data-centers-are-the-new-benchmark-according-to-new-report-from-digitimes-asia/",
+  "Mordor Intelligence":"https://www.mordorintelligence.com/industry-reports/ocp-servers-market",
+  "Landgate":"https://www.landgate.com/news/weekly-data-center-news-01-26-2026",
+  "White House Mar 2026":"https://datacenterworld.com/news-insights/",
+  "Data Center World":"https://datacenterworld.com/global-events/",
+  "Consumer Reports":"https://www.consumerreports.org/data-centers/ai-data-centers-impact-on-electric-bills-water-and-more-a1040338678/",
+  "PA House":"https://www.cityandstatepa.com/policy/2026/03/pa-house-lawmakers-approve-data-center-regulation-bill/412346/",
+  "DC Knowledge (Tariffs)":"https://www.datacenterknowledge.com/supply-chain/tariffs-add-cost-but-component-shortages-dictate-data-center-timelines",
+  "Omdia":"https://www.datacenterknowledge.com/supply-chain/tariffs-add-cost-but-component-shortages-dictate-data-center-timelines",
+  "Palantir":"https://www.networkworld.com/article/4145858/palantir-partners-with-nvidia-to-streamline-ai-data-center-deployment.html",
+  "Palantir/NVIDIA":"https://nvidianews.nvidia.com/news/nvidia-palantir-ai-enterprise-data-intelligence",
+  "S&P Global":"https://www.spglobal.com/energy/en/technology-ai-research-insights/blogs/new-data-center-legislation-roundup-july-2026",
+  "AGC":"https://www.constructionowners.com/news/labor-and-tariffs-strain-construction-as-data-centers-surge",
+  "Lawrence Berkeley":"https://www.consumerreports.org/data-centers/ai-data-centers-impact-on-electric-bills-water-and-more-a1040338678/",
+  "Lawrence Berkeley Lab":"https://www.consumerreports.org/data-centers/ai-data-centers-impact-on-electric-bills-water-and-more-a1040338678/",
+  "Qualcomm":"https://www.datacenterknowledge.com/data-center-chips/qualcomm-enters-data-center-ai-chip-fray-vs-nvidia-amd",
+  "HUMAIN":"https://makitsol.com/ai-infrastructure-gcc-saudi-uae-qatar-guide/",
+  "SiliconANGLE":"https://siliconangle.com/2025/10/27/qualcomm-debuts-ai200-ai250-data-center-ai-chips/",
+  "Forbes":"https://opendatascience.com/qualcomm-unveils-ai-chips-to-challenge-nvidia-and-amd-in-data-centers/",
+  "Iceotope":"https://www.modernmarketingpartners.com/2026/02/17/5-trusted-providers-of-data-center-cooling-solutions/",
+  "Alphawave":"https://www.sdxcentral.com/news/qualcomm-to-return-to-data-center-market-with-ai-cpus/",
+  "SDxCentral":"https://www.sdxcentral.com/news/qualcomm-to-return-to-data-center-market-with-ai-cpus/",
+  "Kao Data":"https://www.datacenterdynamics.com/en/news/kao-data-breaks-ground-at-464m-data-center-in-manchester-the-uk/",
+  "DC Knowledge":"https://www.datacenterknowledge.com/data-center-chips/qualcomm-enters-data-center-ai-chip-fray-vs-nvidia-amd",
+  "Moody's":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-april-2026",
+  "Nebius":"https://www.datacenterknowledge.com/build-design/nebius-s-10b-310mw-data-center-plan-signals-ai-infrastructure-shift",
+  "Meta":"https://datacentremagazine.com/news/this-weeks-top-five-stories-in-the-data-centre-industry-4-april-2026",
+  "Entergy":"https://datacentremagazine.com/news/this-weeks-top-five-stories-in-the-data-centre-industry-4-april-2026",
+  "ConstructConnect":"https://news.constructconnect.com/july-2026-data-center-report-year-to-date-spending-four-times-the-2025-record",
+  "Hitachi/MOL":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-april-2026",
+  "Hitachi":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-april-2026",
+  "CNN":"https://www.cnn.com/2026/04/12/climate/maine-data-center-ban-bill",
+  "Maine Morning Star":"https://mainemorningstar.com/2026/04/09/landmark-data-center-moratorium-passes-maine-legislature/",
+  "Texas Tribune":"https://www.texastribune.org/2026/09/21/texas-data-center-moratorium-water-energy/",
+  "Bloomberg (Insurance)":"https://www.bloomberg.com/news/articles/2026-04-13/data-centers-offer-a-potential-10-billion-windfall-for-insurers",
+  "Seeking Alpha":"https://seekingalpha.com/news/4572848-anthropic-targets-30b-revenue-signs-tpu-deal-with-google-and-broadcom",
+  "ZincFive":"https://www.datacenterdynamics.com/en/news/zincfive-releases-nickel-zinc-battery-cabinet-for-ai-centric-ups-systems/",
+  "ZincFive Apr 8":"https://www.cityam.com/zincfive-announces-nickel-zinc-retrofit-kit-to-modernize-existing-ups-energy-storage-infrastructure/",
+  "Vertiv/ABB":"https://www.datacenterdynamics.com/en/news/zincfive-releases-nickel-zinc-battery-cabinet-for-ai-centric-ups-systems/",
+  "Legrand":"https://dcnnmagazine.com/news/legrand-pdu/",
+  "DCNNMagazine":"https://dcnnmagazine.com/news/legrand-pdu/",
+  "Starline":"https://www.servertech.com/blog/data-centers-are-getting-denser-and-smarter-heres-how-facility-managers-can-keep-up",
+  "Server Technology":"https://www.servertech.com/blog/data-centers-are-getting-denser-and-smarter-heres-how-facility-managers-can-keep-up",
+  "Sunbird":"https://securityboulevard.com/2026/03/tools-to-measure-data-center-infrastructure-efficiency-the-complete-guide/",
+  "Nlyte":"https://securityboulevard.com/2026/03/tools-to-measure-data-center-infrastructure-efficiency-the-complete-guide/",
+  "Panduit":"https://securityboulevard.com/2026/03/tools-to-measure-data-center-infrastructure-efficiency-the-complete-guide/",
+  "SecurityBoulevard":"https://securityboulevard.com/2026/03/tools-to-measure-data-center-infrastructure-efficiency-the-complete-guide/",
+  "TechTarget":"https://www.techtarget.com/searchdatacenter/tip/Streamline-data-center-power-usage-tracking-with-DCIM",
+  "Aravolta":"https://www.aravolta.com/blog/dcim-comparison",
+  "BICSI":"https://www.bicsi.org/",
+  "Sanders":"https://reason.com/2026/04/03/maine-bill-proves-states-are-capable-of-adopting-bad-data-center-policies-without-federal-intervention/",
+  "Adani":"https://www.datacenterknowledge.com/latest-news",
+  "Uptime Institute":"https://www.resultsense.com/news/2026-07-08-datacentre-projects-stalling-ai/",
+  "The Register":"https://www.theregister.com/2026/04/08/nvidia_supply_chain/",
+  "Tom's Hardware":"https://www.tomshardware.com/tech-industry/artificial-intelligence/more-than-75-data-center-build-outs-worth-usd130-billion-have-been-successfully-blocked-in-the-first-four-months-of-2026-bipartisan-opposition-mounts-nationwide-over-fears-of-soaring-power-and-water-costs",
+  "wccftech":"https://wccftech.com/nvidia-ceo-doesnt-rule-out-rubin-for-china/amp/",
+  "Introl":"https://introl.com/blog/bis-export-policy-h200-mi325x-china-case-by-case-2026",
+  "Sourceability":"https://sourceability.com/post/u-s-allows-nvidia-h200-exports-to-china",
+  "Tech Insider":"https://tech-insider.org/nvidia-vera-rubin-platform-gtc-2026-rubin-r100-gpu/",
+  "Futurum":"https://futurumgroup.com/insights/ai-capex-2026-the-690b-infrastructure-sprint/",
+  "Data Center World 2026":"https://datacenterworld.com/news-insights/",
+  "Accelsius":"https://www.businesswire.com/news/home/20260420391618/en/Accelsius-Announces-General-Availability-of-NeuCool-IR150-and-Launches-NeuCool-HyperStart-Program-at-Data-Center-World-2026",
+  "Vertiv":"https://www.vertiv.com/en-us/solutions/learn-about/liquid-cooling-options-for-data-centers/",
+  "Vertiv Jan 2026":"https://www.vertiv.com/en-us/solutions/learn-about/liquid-cooling-options-for-data-centers/",
+  "ZutaCore":"https://www.vertiv.com/en-us/solutions/learn-about/liquid-cooling-options-for-data-centers/",
+  "Eaton/CoolIT":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "Eaton":"https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers",
+  "DCW 2026":"https://www.datacenterknowledge.com/energy-power-supply/data-center-world-2026-real-estate-distributed-power-reshape-ai-buildout",
+  "DCK":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-april-2026",
+  "OpenAI/G42":"https://openai.com/index/five-new-stargate-sites/",
+  "AGBI":"https://www.agbi.com/ai/2026/09/saudi-company-launches-fund-to-build-two-data-centres/",
+  "DCD":"https://www.datacenterdynamics.com/en/news/ocasio-cortez-and-sanders-introduce-ai-data-center-moratorium-act/",
+  "TechCrunch":"https://techcrunch.com/2026/04/25/maines-governor-vetoes-data-center-moratorium/",
+  "Maine.gov":"https://www.maine.gov/governor/mills/news/governor-mills-announces-decision-ld-307-2026-04-24",
+  "GuruFocus":"https://www.gurufocus.com/news/8820291/data-center-developer-plans-45-billion-junk-bond-offering-amid-ai-demand",
+  "BofA":"https://finance.yahoo.com/news/bofa-hikes-2026-chips-forecast-to-13-trillion-names-nvidia-broadcom-marvell-amd-as-top-drivers-164800203.html",
+  "Yahoo Finance":"https://finance.yahoo.com/news/nvidia-launches-vera-rubin-its-next-major-ai-platform-at-ces-2026-230045205.html",
+  "Invezz":"https://invezz.com/news/2026/04/25/meta-microsoft-earnings-due-next-week-heres-what-top-analysts-say/",
+  "Latitude Media":"https://www.latitudemedia.com/news/up-to-half-of-the-worlds-data-centers-may-be-delayed-this-year/",
+  "STRisker Apr 27":"https://writing.strisker.com/data-centers-daily-notes-april-27-2026/",
+  "BIS / Introl":"https://introl.com/blog/bis-export-policy-h200-mi325x-china-case-by-case-2026",
+  "BIS":"https://introl.com/blog/bis-export-policy-h200-mi325x-china-case-by-case-2026",
+  "Q1 Earnings":"https://www.cnbc.com/2026/04/29/aws-earnings-q1-2026.html",
+  "NVIDIA Q1 2026":"https://sherwood.news/tech/meta-earnings-q1-2026/",
+  "AMD Q1":"https://finance.yahoo.com/news/bofa-hikes-2026-chips-forecast-to-13-trillion-names-nvidia-broadcom-marvell-amd-as-top-drivers-164800203.html",
+  "El Paso Matters":"https://elpasomatters.org/2026/04/30/fort-bliss-data-center-water-electricity-use-army-carlyle-group-meta-project-jupiter/",
+  "Bloom":"https://sifted.eu/articles/nscale-delays",
+  "Sherwood":"https://sherwood.news/tech/meta-earnings-q1-2026/",
+  "Quartz":"https://qz.com/meta-q1-2026-earnings-ai-spending-capex-stock-042926",
+  "Spectrum Local News":"https://spectrumlocalnews.com/me/maine/business/2026/04/29/maine-house-sustains-data-center-moratorium-veto",
+  "Seattle Council":"https://council.seattle.gov/2026/06/09/city-council-passes-emergency-data-center-moratorium-and-policy-framework/",
+  "STRisker Apr 29":"https://writing.strisker.com/data-centers-daily-notes-april-29-2026/",
+  "STRisker Apr 30":"https://writing.strisker.com/data-centers-daily-notes-april-30-2026/",
+  "AMD Q1 2026":"https://www.datacenterdynamics.com/en/news/amd-posts-q1-2026-data-center-revenue-of-58bn-forecasts-120bn-server-cpu-income-by-2030/",
+  "AMD IR":"https://ir.amd.com/news-events/press-releases/detail/1284/amd-reports-first-quarter-2026-financial-results",
+  "AMD Q1 Call":"https://www.alphaspread.com/security/nasdaq/amd/investor-relations/earnings-call/q1-2026",
+  "AMD/Meta":"https://ir.amd.com/news-events/press-releases/detail/1284/amd-reports-first-quarter-2026-financial-results",
+  "AMD":"https://www.amd.com/en/blogs/2026/amd-launches-helios-the-highest-performing-rackscale-ai-infrastructure-solution.html",
+  "AMD/DCD":"https://www.datacenterdynamics.com/en/news/amd-officially-launches-helios-rackscale-system-with-mi455x-gpus-venice-epyc-cpus-and-pensando/",
+  "TradingKey":"https://www.tradingkey.com/analysis/stocks/us-stocks/261902312-nvidia-q1-earnings-preview-rubin-network-tradingkey",
+  "NVIDIA":"https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+  "NVIDIA Newsroom":"https://nvidianews.nvidia.com/news/nvidia-vera-rubin-platform",
+  "Yahoo":"https://finance.yahoo.com/markets/stocks/articles/nvidia-gtc-2026-unveils-vera-070536912.html",
+  "Apify":"https://use-apify.com/blog/nvidia-vera-rubin-gtc-2026",
+  "STRisker May 5-7":"https://writing.strisker.com/data-centers-weekly-briefing-may-4-7-2026/",
+  "Stocktitan":"https://www.stocktitan.net/news/NVDA/nvidia-announces-financial-results-for-first-quarter-fiscal-fq78amc9h84m.html",
+  "NVIDIA Q1 FY27":"https://www.stocktitan.net/news/NVDA/nvidia-announces-financial-results-for-first-quarter-fiscal-fq78amc9h84m.html",
+  "IndexBox":"https://www.indexbox.io/blog/nvidia-q1-fiscal-2027-earnings-preview-key-numbers-and-what-to-watch/",
+  "IG":"https://www.ig.com/en/news-and-trade-ideas/nvidia-q1-fy-2027-earnings-preview-260513",
+  "Phemex":"https://phemex.com/academy/nvidia-nvda-stock-2026",
+  "AWS":"https://techstartups.com/2026/07/31/top-tech-news-today-july-31-2026-amazon-anthropic-apple-google-microsoft-reddit-sony-suno-more/",
+  "STRisker May 14":"https://writing.strisker.com/data-centers-daily-notes-may-14-2026/",
+  "STRisker May 13":"https://writing.strisker.com/data-centers-daily-notes-may-13-2026/",
+  "STRisker May 12":"https://writing.strisker.com/data-centers-daily-notes-may-12-2026/",
+  "San Jose Downtown":"https://sjdowntown.com/event/data-center-expo-north-america/",
+  "NAIOP":"https://www.naiop.org/events-and-sponsorship/corporate-events-list/conferences/2026-icon-data-centers/",
+  "NEOtrans":"https://neo-trans.blog/2026/05/06/1-6b-data-center-planned-in-cleveland/",
+  "NVIDIA 8-K":"https://www.stocktitan.net/sec-filings/NVDA/8-k-nvidia-corp-reports-material-event-56086a88bbb4.html",
+  "INDmoney":"https://www.indmoney.com/blog/us-stocks/nvidia-stock-q1-fy27-earnings-81b-revenue-25x-dividend",
+  "TechCrunch Brockovich":"https://techcrunch.com/2026/05/31/erin-brockovich-takes-aim-at-data-center-secrecy/",
+  "brockovichdatacenter.com":"https://brockovichdatacenter.com/",
+  "Erin Brockovich":"https://brockovichdatacenter.com/",
+  "NYT":"https://www.nytimes.com/2026/05/26/us/data-centers-kassi-solberg.html",
+  "Nevada Independent":"https://thenevadaindependent.com/article/reno-hit-pause-on-approving-data-centers-now-what-happens",
+  "Urbanist":"https://www.theurbanist.org/seattle-advances-data-center-moratorium-amid-public-backlash/",
+  "WBTV":"https://www.wbtv.com/2026/06/09/charlotte-city-council-approves-150-day-moratorium-new-data-centers/",
+  "Press Herald":"https://www.pressherald.com/2026/05/29/gorham-to-propose-data-center-moratorium/",
+  "DCD / Synergy":"https://www.datacenterdynamics.com/en/news/hyperscalers-account-for-41-of-worldwide-data-center-capacity-synergy-research-group/",
+  "GlobeNewswire":"https://www.globenewswire.com/news-release/2026/08/11/3343031/28124/en/hyperscale-data-center-market-report-available-segments-components-deployments-facility-sizes-end-users-workloads-and-cooling-technologies.html",
+  "GlobeNewsWire":"https://www.globenewswire.com/news-release/2026/08/11/3343031/28124/en/hyperscale-data-center-market-report-available-segments-components-deployments-facility-sizes-end-users-workloads-and-cooling-technologies.html",
+  "STRisker May 27":"https://writing.strisker.com/data-centers-daily-notes-may-27-2026/",
+  "STRisker May 28":"https://writing.strisker.com/data-centers-daily-notes-may-28-2026/",
+  "Datacloud":"https://www.datacloudglobalcongress.com/",
+  "Datacloud Cannes":"https://www.datacloudglobalcongress.com/",
+  "Palais des Festivals":"https://en.palaisdesfestivals.com/offers/datacloud-global-congress-cannes-en-4322191/",
+  "WFAE":"https://www.wfae.org/energy-environment/2026-06-08/charlotte-city-council-will-hold-a-vote-on-a-150-day-data-center-moratorium-tonight",
+  "UPI":"https://www.upi.com/Top_News/World-News/2026/06/08/naver-nvidia-ai-factory-hyperscale-data-center/3061780961583/",
+  "The Elec":"https://www.thelec.net/news/articleView.html?idxno=11102",
+  "Naver+NVIDIA":"https://www.upi.com/Top_News/World-News/2026/06/08/naver-nvidia-ai-factory-hyperscale-data-center/3061780961583/",
+  "STRisker June 1":"https://writing.strisker.com/data-centers-daily-notes-june-1-2026/",
+  "STRisker June 2":"https://writing.strisker.com/data-centers-daily-notes-june-2-2026/",
+  "STRisker June 3":"https://writing.strisker.com/data-centers-daily-notes-june-3-2026/",
+  "STRisker June 4":"https://writing.strisker.com/data-centers-daily-notes-june-4-2026/",
+  "STRisker June 8":"https://writing.strisker.com/data-centers-daily-notes-june-8-2026/",
+  "STRisker":"https://writing.strisker.com/data-centers-weekly-briefing-jun-1-4-2026/",
+  "GeekWire":"https://www.geekwire.com/2026/this-is-seattles-position-on-ai-city-council-votes-unanimously-to-pause-new-data-centers/",
+  "Gizmodo":"https://gizmodo.com/seattle-passes-most-symbolically-potent-data-center-moratorium-yet-2000769840",
+  "Common Dreams":"https://www.commondreams.org/news/stop-data-centers",
+  "Lex18":"https://www.lex18.com/news/covering-kentucky/lexington-city-council-passes-moratorium-on-data-center-development",
+  "Arkansas Times":"https://arktimes.com/arkansas-blog/2026/06/09/this-is-real-data-center-moratorium-pushed-to-july-after-tense-meeting",
+  "STRisker June 10":"https://writing.strisker.com/data-centers-daily-notes-june-10-2026/",
+  "STRisker June 11":"https://writing.strisker.com/data-centers-daily-notes-june-11-2026/",
+  "STRisker June 15":"https://writing.strisker.com/data-centers-daily-notes-june-15-2026/",
+  "DCK June":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-june-2026",
+  "TechRadar":"https://www.techradar.com/pro/if-one-piece-of-your-supply-chain-is-delayed-then-your-whole-project-cant-deliver-nearly-half-of-us-data-centers-planned-for-2026-canceled-or-delayed-and-things-could-soon-get-much-worse",
+  "Verdict":"https://www.verdict.co.uk/qualcomm-ai200-ai250-racks-ai-inference/",
+  "NAND Research":"https://nand-research.com/research-note-qualcomm-introduces-ai200-ai250-for-data-center-inference/",
+  "StorageNewsletter":"https://www.storagenewsletter.com/2026/01/20/qualcomm-unveils-ai200-and-ai250-redefining-rack-scale-data-center-inference-performance-for-the-ai-era/",
+  "Interesting Engineering":"https://interestingengineering.com/energy/qualcomm-ai200-ai250-data-center-ai-inference",
+  "dcpulse":"https://dcpulse.com/news/qualcomm-ai200-ai250-rack-scale-inference-systems-for-data-centres",
+  "Spheron":"https://www.spheron.network/blog/qualcomm-ai200-vs-nvidia-gpus-inference-chip-2026/",
+  "SemiWiki":"https://semiwiki.com/forum/threads/qualcomm%E2%80%99s-ai-chip-push-targets-data-centers.23887/",
+  "Bosch Rexroth":"https://www.boschrexroth.com/en/gb/connected-hydraulics/products/sytronix/",
+  "Bosch Rexroth GB":"https://www.boschrexroth.com/en/gb/connected-hydraulics/products/sytronix/",
+  "LSA Control":"https://www.lsa-control.com/en/motors/sytronix",
+  "Qualcomm AI200/AI250":"https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm",
+  "Toms Hardware Qualcomm AI200":"https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm",
+  "Bisnow":"https://www.bisnow.com/new-york/news/data-center-development/new-york-proposed-data-center-moratorium-kathy-hochul-135052",
+  "DataCentreInsight":"https://datacentreinsight.co.uk/2025/12/29/2026-the-year-the-uks-ai-infrastructure-moves-into-full-acceleration/",
+  "Route Fifty":"https://www.route-fifty.com/artificial-intelligence/2026/06/data-center-moratoriums-gain-ground-states-and-cities/414090/",
+  "Colorado Sun":"https://coloradosun.com/2026/06/18/colorado-data-center-update-pollution-protests-moratoriums/",
+  "SemiAnalysis":"https://newsletter.semianalysis.com/p/stop-saying-half-of-2026-us-datacenter",
+  "Rockefeller Institute":"https://www.rockinst.org/blog/updates-on-the-cloud-more-moratoriums-on-data-centers/",
+  "WJFW":"https://www.wjfw.com/news/regional/wisconsin-county-considers-18-month-hyperscale-data-center-moratorium/article_7b40909c-d973-580b-b836-2bc6fd9df15d.html",
+  "STRisker June 17":"https://writing.strisker.com/data-centers-daily-notes-june-17-2026/",
+  "STRisker June 16":"https://writing.strisker.com/data-centers-daily-notes-june-16-2026/",
+  "Data Centre LIVE":"https://datacentremagazine.com/events/tech-and-ai-live/data-centre-live-london-2026",
+  "Tech-Insider":"https://tech-insider.org/us-ai-data-center-delays-cancellations-7gw-capacity-crisis-2026/",
+  "Data Center Watch":"https://www.datacenterwatch.org/report",
+  "The Hill":"https://thehill.com/policy/energy-environment/5984187-white-house-data-center-electricity-cost/",
+  "Earthjustice":"https://earthjustice.org/press/2026/nys-legislature-passes-data-center-moratorium",
+  "GTLaw":"https://www.gtlaw.com/en/insights/2026/6/new-york-legislature-passes-data-center-moratorium-bill-awaits-governors-approval",
+  "CBRE UK":"https://www.cbre.co.uk/insights/books/uk-real-estate-market-outlook-2026/data-centres",
+  "Barbour ABI":"https://barbour-abi.com/whats-driving-the-surge-in-data-centre-construction-projects-in-the-uk/",
+  "Sightline Climate":"https://tech-insider.org/us-ai-data-center-delays-cancellations-7gw-capacity-crisis-2026/",
+  "Channel Post MEA":"https://channelpostmea.com/2026/07/02/meeza-completes-hyperscaler-data-center-expansion-ahead-of-schedule/",
+  "SaudiGulf Projects":"https://www.saudigulfprojects.com/2026/07/meeza-delivers-4mw-data-centre-expansion-project-under-qar-350-million-long-term-agreement-with-global-hyper-scaler/",
+  "MEEZA":"https://www.datacenterdynamics.com/en/news/qatars-meeza-signs-8mw-lease-with-global-hyperscaler/",
+  "Ooredoo":"https://www.telecompaper.com/news/ooredoo-qatar-starts-work-on-new-data-centre-in-mesaimeer--1042556",
+  "Syntys":"https://www.ooredoo.com/en/media/news_view/ooredoo-group-announces-syntys-acquisition-of-q-data-facilities-in-qatar/",
+  "Gulf Times":"https://www.gulf-times.com/article/721710/qatar/dr-bader-al-hajri-elected-president-of-arab-federation-for-artificial-intelligence",
+  "DCK July":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-july-2026",
+  "SoftBank":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-july-2026",
+  "Highlands Current":"https://highlandscurrent.org/2026/07/03/data-centers-face-backlash/",
+  "Fortune":"https://fortune.com/2026/08/12/the-gulf-ai-boom-is-driving-the-race-to-control-the-data-highways/",
+  "The Pointer":"https://thepointer.com/article/2026-07-04/shut-it-down-mississauga-residents-fighting-against-first-hyperscale-data-centre-proposal",
+  "DLA Piper":"https://www.dlapiper.com/en-us/insights/publications/2026/07/new-york-state-legislature-passes-first-in-the-nation-data-center-moratorium",
+  "STRisker June 30":"https://writing.strisker.com/data-centers-daily-notes-june-30-2026/",
+  "STRisker July 2":"https://writing.strisker.com/data-centers-daily-notes-july-2-2026/",
+  "Qatar Tribune":"https://www.qatar-tribune.com/article/223412/nation/arab-union-of-ai-and-programmingnames-dr-bader-al-hajri-as-president",
+  "MENAFN":"https://menafn.com/1110810088/Dr-Bader-Al-Hajri-Elected-President-Of-Arab-Federation-For-Artificial-Intelligence",
+  "QNA":"https://qna.org.qa/en/news/news-details?id=on-world-creativity-and-innovation-day-president-of-arab-federation-for-ai-to-qna-qatar-seeks-to-consolidate-position-as-regional-hub-for-innovation-1&date=20/04/2026",
+  "The Peninsula":"http://thepeninsulaqatar.com/article/21/04/2026/qatar-seeks-to-consolidate-position-as-regional-hub-for-innovation-president-of-arab-federation-for-ai",
+  "The Peninsula Qatar":"https://thepeninsulaqatar.com/article/30/03/2026/qatar-datacentre-market-set-to-reach-1bn-by-2034-amid-digital-surge",
+  "Abhs":"https://www.abhs.in/blog/qatar-20-billion-ai-infrastructure-brookfield-gulf-race-2026",
+  "Axios":"https://www.axios.com/2026/02/06/qatar-ai-sovereignty",
+  "Money/USNews":"https://money.usnews.com/investing/news/articles/2026-07-13/meta-expands-louisiana-data-center-to-5-gigawatts-compute-capacity",
+  "DC Magazine":"https://datacentremagazine.com/news/what-are-the-factors-delaying-nscales-2-6-bn-uk-investment",
+  "Cloud Computing News":"https://www.cloudcomputing-news.net/news/ai-data-centre-delays-power-grid-limits/",
+  "ResultSense":"https://www.resultsense.com/news/2026-07-08-datacentre-projects-stalling-ai/",
+  "Sightline":"https://www.resultsense.com/news/2026-07-08-datacentre-projects-stalling-ai/",
+  "PRNewswire":"https://www.prnewswire.com/news-releases/hyperscale-data-announces-preliminary-first-half-2026-revenue-growth-of-approximately-57-year-over-year-reaffirms-2026-revenue-guidance-of-180-million-to-200-million-and-provides-preliminary-2027-revenue-outlook-exceeding-300-302837235.html",
+  "TFTC":"https://www.tftc.io/hyperscale-data-1000-btc-corporate-treasury",
+  "STRisker July 13":"https://writing.strisker.com/data-centers-daily-notes-july-13-2026/",
+  "Meta LA 5 GW":"https://money.usnews.com/investing/news/articles/2026-07-13/meta-expands-louisiana-data-center-to-5-gigawatts-compute-capacity",
+  "AI DC Index":"https://aidatacenterindex.com/",
+  "Al-Hajri":"https://www.qatar-tribune.com/article/223412/nation/arab-union-of-ai-and-programmingnames-dr-bader-al-hajri-as-president",
+  "Gov.ny.gov":"https://www.governor.ny.gov/news/first-statewide-moratorium-new-hyperscale-data-centers-launched-governor-kathy-hochul",
+  "Sifted":"https://sifted.eu/articles/nscale-delays",
+  "Sifted/DC Review":"https://datacentrereview.com/2026/07/nscales-2bn-essex-data-centre-hit-by-grid-delays/",
+  "Data Centre Review":"https://datacentrereview.com/2026/07/nscales-2bn-essex-data-centre-hit-by-grid-delays/",
+  "TheNextWeb":"https://thenextweb.com/news/nscale-essex-data-centre-uk-grid-delay",
+  "Capacity Media":"https://capacityglobal.com/news/nscale-uk-ai-data-centre-project-power-constraints/",
+  "WBUR Here & Now":"https://www.wbur.org/hereandnow/2026/07/15/ai-data-centers",
+  "Bloom Energy":"https://sifted.eu/articles/nscale-delays",
+  "MEEZA / DCD":"https://www.datacenterdynamics.com/en/news/qatari-data-center-firm-meeza-secures-219m-funding-to-fuel-44mw-expansion/",
+  "Qatar MCIT":"https://www.mcit.gov.qa/en/news/mcit-signs-a-cooperation-agreement-with-meeza-to-expand-the-azure-qatar-data-center/",
+  "Zawya":"https://www.zawya.com/en/business/technology-and-telecom/qatar-meeza-to-expand-data-centre-capacity-in-next-two-to-three-years-sqt52k3e",
+  "The Tech Capital":"https://thetechcapital.com/meeza-secures-439-million-facility-for-qatar-data-centre-expansion/",
+  "STRisker July 16":"https://writing.strisker.com/data-centers-daily-notes-july-16-2026/",
+  "STRisker July 17":"https://writing.strisker.com/data-centers-daily-notes-july-17-2026/",
+  "DCPI-LATAM":"https://newenergyevents.com/dcpi-latam/",
+  "aidatacenterindex.com":"https://aidatacenterindex.com/",
+  "Brockovich Noise Simulation":"https://www.brockovichdatacenter.com/noise-impact.html",
+  "STRisker July 22":"https://writing.strisker.com/data-centers-daily-notes-july-22-2026/",
+  "AR Mason":"https://armason.co.uk/uk-data-centre-intelligence-13th-july-2026/",
+  "Gulf News":"https://gulfnews.com/uae/government/bjb1s5t-hamdan-bin-mohammed-witnesses-announcement-aed2-1.500102236",
+  "AOL":"https://www.aol.com/articles/ai-giant-2bn-data-centre-050000000.html",
+  "MEEZA Q1":"https://www.datacenterdynamics.com/en/news/qatari-data-center-firm-meeza-secures-219m-funding-to-fuel-44mw-expansion/",
+  "Alphabet Q2":"https://thehill.com/policy/energy-environment/5984187-white-house-data-center-electricity-cost/",
+  "CNBC AWS Q2":"https://www.cnbc.com/2026/07/30/amazon-amzn-q2-earnings-report-2026.html",
+  "CNBC Meta":"https://www.cnbc.com/2026/07/29/meta-q2-earnings-report-2026.html",
+  "UncoverAlpha":"https://www.uncoveralpha.com/p/amazon-google-microsoft-meta-q2-earnings",
+  "Value Add":"https://valueaddvc.com/pulse/meta-q2-2026-revenue-beat-eps-miss-2026",
+  "KY Lantern":"https://kentuckylantern.com/2026/07/29/hyperscale-data-center-natural-gas-fired-project-planned-for-paducahs-former-nuclear-plant/",
+  "Kentucky Lantern":"https://kentuckylantern.com/2026/07/29/hyperscale-data-center-natural-gas-fired-project-planned-for-paducahs-former-nuclear-plant/",
+  "Bitcoin.com":"https://news.bitcoin.com/mining/hyperscale-data-sells-100-btc-to-fuel-3b-ai-data-center/",
+  "Tech Startups":"https://techstartups.com/2026/07/31/top-tech-news-today-july-31-2026-amazon-anthropic-apple-google-microsoft-reddit-sony-suno-more/",
+  "AMZN Q2":"https://www.cnbc.com/2026/07/30/amazon-amzn-q2-earnings-report-2026.html",
+  "Meta Q2":"https://www.cnbc.com/2026/07/29/meta-q2-earnings-report-2026.html",
+  "AWS Q2":"https://www.cnbc.com/2026/07/30/amazon-amzn-q2-earnings-report-2026.html",
+  "Paducah KY":"https://kentuckylantern.com/2026/07/29/hyperscale-data-center-natural-gas-fired-project-planned-for-paducahs-former-nuclear-plant/",
+  "JEPIC-USA":"https://www.jepic-usa.org/digests/2026/8/7/usa-texas-data-center-moratorium-risks-delaying-20-of-us-pipeline",
+  "DCK Aug":"https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-august-2026",
+  "TradeArabia":"https://tradearabia.com/News/466168/Qatari-group-Meeza-secures-$432m-funding-to-boost-data-centre-capacity",
+  "Telegraph via Sifted":"https://sifted.eu/articles/nscale-delays",
+  "STRisker Aug 3-7":"https://writing.strisker.com/data-centers-weekly-briefing-august-3-7-2026/",
+  "Network World":"https://www.networkworld.com/article/4200222/data-center-energy-constraints-and-moratoriums-are-mounting-expect-to-see-stalled-ai-projects.html",
+  "Utility Dive":"https://www.utilitydive.com/news/texas-hits-pause-data-center-interconnections/827046/",
+  "Power Magazine":"https://www.powermag.com/texas-audit-could-delay-49-8-gw-of-data-center-load-cost-projects-up-to-15-billion-bnef-warns/",
+  "Bloomberg NEF":"https://seekingalpha.com/news/4629635-texas-moratorium-on-data-centers-puts-20-percent-of-u-s-pipeline-at-risk-of-delay-bloomberg",
+  "BNEF":"https://seekingalpha.com/news/4629635-texas-moratorium-on-data-centers-puts-20-percent-of-u-s-pipeline-at-risk-of-delay-bloomberg",
+  "US News":"https://www.usnews.com/news/best-states/texas/articles/2026-08-04/data-center-approvals-in-texas-halted-until-audits-completed-gov-greg-abbott-says",
+  "DataX Connect":"https://dataxconnect.com/weekly-data-centre-news-4th-september-2026/",
+  "Bloom Q2 2026 10-Q":"https://www.sec.gov/Archives/edgar/data/0001664703/000162828026050247/be-20260630.htm",
+  "RexShares":"https://www.rexshares.com/nvidia-earnings/",
+  "Hudson Labs":"https://www.hudson-labs.com/research/nvidia-q2-2027-earnings-preview-nvda-revenue-guidance-key-factors",
+  "MarketsandMarkets":"https://www.globenewswire.com/news-release/2026/08/21/3349175/0/en/hyperscale-data-center-market-surges-to-608-54-billion-at-a-cagr-24-6-by-2030-report-by-marketsandmarkets.html",
+  "DCK Hardware Aug":"https://www.datacenterknowledge.com/data-center-hardware/data-center-hardware-highlights-august-2026",
+  "DataCentreNews":"https://datacentrenews.substack.com/p/weekly-data-centre-news-28082026",
+  "KERA":"https://www.keranews.org/texas-news/2026-08-17/texas-will-audit-up-to-300-projects-mostly-data-centers-after-gov-greg-abbotts-order",
+  "Gibson Dunn":"https://www.gibsondunn.com/what-governor-abbotts-data-center-audit-directive-means-for-ercot-and-the-batch-zero-study-process/",
+  "Mobile Europe":"https://www.mobileeurope.co.uk/meeza-to-almost-double-data-centre-capacity-to-meet-qatari-demand/",
+  "Telecompaper":"https://www.telecompaper.com/news/meeza-to-quadruple-data-centre-capacity-in-next-four-years--1567237",
+  "NVIDIA Q2 FY27":"https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+  "NVDA":"https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+  "NVDA Q2 FY27":"https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+  "NVDA Q2 FY27 (SEC)":"https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+  "Fortune NVDA":"https://fortune.com/2026/08/26/nvidia-results-q2-earnings/",
+  "Pepperstone NVDA":"https://pepperstone.com/en/insights/market-analysis/equities/nvidia-s-q2-fy27-results-a-beat-big-enough-to-move-the-stock",
+  "CNBC Anthropic-Nscale":"https://www.cnbc.com/2026/08/26/anthropic-and-nscale-strike-45-billion-cloud-deal-sources-say.html",
+  "TechCrunch Anthropic-Nscale":"https://techcrunch.com/2026/08/26/anthropic-continues-compute-gobbling-streak-in-45-billion-deal-with-nscale/",
+  "AMD Helios Blog":"https://www.amd.com/en/blogs/2026/amd-launches-helios-the-highest-performing-rackscale-ai-infrastructure-solution.html",
+  "DCD Helios Launch":"https://www.datacenterdynamics.com/en/news/amd-officially-launches-helios-rackscale-system-with-mi455x-gpus-venice-epyc-cpus-and-pensando/",
+  "DataCentreNews Aug 28":"https://datacentrenews.substack.com/p/weekly-data-centre-news-28082026",
+  "DC Richness $630B":"https://datacenterrichness.substack.com/p/hyperscalers-plan-630-billion-in",
+  "Europe hyperscale 2031":"https://www.globenewswire.com/news-release/2026/08/31/3353082/28124/en/europe-hyperscale-data-center-market-outlook-forecast-2026-2031-ai-and-cloud-adoption-accelerate-europe-s-data-center-expansion.html",
+  "Utility Dive TX BNEF":"https://www.utilitydive.com/news/texas-data-center-pause-puts-us-pipeline-risk-of-delay-bnef/827185/",
+  "MultiState TX":"https://www.multistate.us/insider/2026/8/19/the-local-fight-over-data-centers-a-texas-case-study",
+  "DCK Nscale $865M NC":"https://www.datacenterknowledge.com/investing/uk-s-nscale-to-boost-us-footprint-with-865m-nc-data-center-deal",
+  "DC Magazine Nscale":"https://datacentremagazine.com/news/what-are-the-factors-delaying-nscales-2-6-bn-uk-investment",
+  "Gulf Times Al-Hajri":"https://www.gulf-times.com/article/721710/qatar/dr-bader-al-hajri-elected-president-of-arab-federation-for-artificial-intelligence",
+  "Peninsula Qatar Al-Hajri":"http://thepeninsulaqatar.com/article/09/03/2026/arab-union-for-artificial-intelligence-to-prioritise-research-innovation-in-key-sectors",
+  "Yahoo Qatar DC 2025-30":"https://uk.finance.yahoo.com/news/qatars-data-center-landscape-2025-084300545.html",
+  "Zawya MEEZA 2-3yr":"https://www.zawya.com/en/business/technology-and-telecom/qatar-meeza-to-expand-data-centre-capacity-in-next-two-to-three-years-sqt52k3e",
+  "Cloud Datacenter Convention":"https://clouddatacenter.events/",
+  "DCW Asia 2026":"https://datacentremagazine.com/events/data-centre-world-asia-2026",
+  "Anthropic":"https://www.cnbc.com/2026/08/26/anthropic-and-nscale-strike-45-billion-cloud-deal-sources-say.html",
+  "PwC":"https://www.pwc.com/gx/en/news-room/press-releases/2026/global-investment-in-ai-infrastructure.html",
+  "DC Frontier PwC":"https://www.datacenterfrontier.com/machine-learning/article/55403120/pwc-maps-316-trillion-ai-data-center-buildout-through-2050",
+  "DCD MEEZA Lease":"https://www.datacenterdynamics.com/en/news/qatars-meeza-signs-8mw-lease-with-global-hyperscaler/",
+  "MEED GCC":"https://www.globaldata.com/store/report/gcc-data-centre-projects-market-analysis/",
+  "Analysys Mason GCC":"https://www.analysysmason.com/about-us/news/predictions-2026/prediction-ai-investment-gcc/",
+  "Mak IT GCC":"https://makitsol.com/ai-infrastructure-gcc-saudi-uae-qatar-guide/",
+  "Arizton Africa":"https://www.prnewswire.com/news-releases/africa-data-center-market-investment-to-reach-usd-8-76-billion-by-2031--as-south-africa-kenya-nigeria-and-egypt-emerge-as-strategic-hubs--arizton-302809272.html",
+  "BusinessDay NG":"https://businessday.ng/technology/article/investors-pour-into-africas-digital-backbone-as-data-centre-projects-near-900-mw/",
+  "Introl Africa":"https://introl.com/blog/africa-ai-data-center-boom-opportunities-nigeria-kenya-south-africa",
+  "Ecofin Africa":"https://www.ecofinagency.com/news/0309-48382-africa-s-big-four-host-46-of-the-continent-s-data-centers-study",
+  "African Energy Chamber":"https://energychamber.org/data-centers-could-be-the-spark-africas-power-sector-needs/",
+  "Daily Signal":"https://www.dailysignal.com/2026/08/23/data-center-backlash-projects-halt/",
+  "Tom's Hardware $130B":"https://www.tomshardware.com/tech-industry/artificial-intelligence/more-than-75-data-center-build-outs-worth-usd130-billion-have-been-successfully-blocked-in-the-first-four-months-of-2026-bipartisan-opposition-mounts-nationwide-over-fears-of-soaring-power-and-water-costs",
+  "Bloomberg Law":"https://news.bloomberglaw.com/litigation/data-center-foes-newest-tack-sue-locals-over-approval-process-100",
+  "Brookings":"https://www.brookings.edu/articles/data-center-moratoriums-are-not-a-substitute-for-oversight/",
+  "Nscale GB300 (GNW)":"https://www.globenewswire.com/news-release/2025/10/15/3166823/0/en/Nscale-Contracts-Approximately-200-000-NVIDIA-GB300-GPUs-with-Microsoft-to-Deliver-NVIDIA-AI-Infrastructure-Across-Europe-and-the-U-S.html",
+  "GNW Nscale 200K GB300 $14B":"https://www.globenewswire.com/news-release/2025/10/15/3166823/0/en/Nscale-Contracts-Approximately-200-000-NVIDIA-GB300-GPUs-with-Microsoft-to-Deliver-NVIDIA-AI-Infrastructure-Across-Europe-and-the-U-S.html",
+  "TNW Nscale Essex":"https://thenextweb.com/news/nscale-essex-data-centre-uk-grid-delay",
+  "EUDCA":"https://www.eudca.org/new-2026-state-of-european-data-centres",
+  "CBRE APAC":"https://www.cbre.com/insights/articles/asia-pacific-data-centre-boom-to-continue-in-2026",
+  "NVIDIA Rubin":"https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer",
+  "DCD Qualcomm":"https://www.datacenterdynamics.com/en/news/qualcomm-launches-ai200-and-ai250-chip-offering-targeting-inferencing-workloads-at-rack-scale/",
+  "DC Frontier Aligned":"https://www.datacenterfrontier.com/hyperscale/article/55323360/blackrock-led-consortium-to-acquire-aligned-data-centers-in-40-billion-ai-infrastructure-deal",
+  "GIP Aligned":"https://www.global-infra.com/news/ai-infrastructure-partnership-aip-mgx-and-blackrocks-global-infrastructure-partners-gip-to-acquire-all-equity-in-aligned-data-centers/",
+  "American Bazaar House Bill":"https://americanbazaaronline.com/2026/09/11/house-bill-data-center-electricity-costs-487979/",
+  "Energy Connects":"https://www.energyconnects.com/news/utilities/2026/september/why-the-data-center-backlash-is-a-defining-midterms-issue",
+  "CRS R49326":"https://www.everycrsreport.com/reports/R49326.html",
+  "MultiState State Legislation":"https://www.multistate.us/insider/2026/2/20/state-data-center-legislation-in-2026-tackles-energy-and-tax-issues",
+  "Saving to Invest":"https://savingtoinvest.com/why-is-your-electric-bill-going-up-in-2026-what-data-centers-have-to-do-with-it/",
+  "Connecting Africa Egypt":"https://www.connectingafrica.com/data-centers/vodafone-cassava-elsewedy-electric-unveil-1b-egypt-data-center-project",
+  "Cassava":"https://www.cassavatechnologies.com/launch-of-egypt-first-national-ai-factory-in-partnership-with-vodafone-business/",
+  "Cassava AI Factory":"https://www.cassavatechnologies.com/launch-of-egypt-first-national-ai-factory-in-partnership-with-vodafone-business/",
+  "TechAfrica Egypt":"https://techafricanews.com/2026/09/08/egypt-vodafone-elsewedy-cassava-1bn-data-centre/",
+  "Digital Parks Africa":"https://news.broadcastmediaafrica.com/2026/09/14/digital-parks-africa-expands-into-west-africa-with-new-nigeria-data-centre/",
+  "Datacloud Africa":"https://www.datacloudafrica.com/",
+  "DCD Khazna":"https://www.datacenterdynamics.com/en/news/khazna-announces-1gw-data-center-expansion-plans/",
+  "Khazna":"https://www.datacenterdynamics.com/en/news/khazna-announces-1gw-data-center-expansion-plans/",
+  "AGBI Saudi Fund":"https://www.agbi.com/ai/2026/09/saudi-company-launches-fund-to-build-two-data-centres/",
+  "Telecompaper Ooredoo Mesaimeer":"https://www.telecompaper.com/news/ooredoo-qatar-starts-work-on-new-data-centre-in-mesaimeer--1042556",
+  "DCD Ooredoo Floor":"https://www.datacenterdynamics.com/en/news/ooredoo-opens-new-data-center-floor-in-qatar/",
+  "GNW UK DC Portfolio":"https://www.globenewswire.com/news-release/2026/09/14/3360862/28124/en/united-kingdom-data-center-portfolio-poised-for-expansion-as-cloud-ai-and-hyperscale-demand-drive-new-development-opportunities.html",
+  "Burges Salmon":"https://www.burges-salmon.com/articles/102lxwu/data-centres-ai-growth-zones-in-planning-change-on-the-horizon-in-2026/",
+  "Baker McKenzie AI Growth Zones":"https://www.bakermckenzie.com/en/insight/publications/2026/01/uk-government-policy-paper-delivering-ai-growth-zones",
+  "Drax":"https://energy.drax.com/intelligence/data-centres-ai-government-support/",
+  "Cushman APAC":"https://www.cushmanwakefield.com/en/singapore/insights/apac-data-centre-update",
+  "Cushman & Wakefield":"https://www.cushmanwakefield.com/en/singapore/insights/apac-data-centre-update",
+  "ARC Group SEA":"https://arc-group.com/southeast-asia-data-centre-ma-2026/",
+  "McKinsey APAC":"https://www.mckinsey.com/featured-insights/future-of-asia/countries-and-regions/southeast-asia/southeast-asia-perspectives/beyond-the-spillover-asia-pacific-the-next-engine-of-data-center-demand",
+  "Baxtel Events":"https://baxtel.com/events",
+  "DCW Power Dallas":"https://dcwpower.com/",
+  "brockovichdatacenter.com Sep 10":"https://www.brockovichdatacenter.com/",
+  "Qualcomm HUMAIN":"https://www.datacenterdynamics.com/en/news/qualcomm-launches-ai200-and-ai250-chip-offering-targeting-inferencing-workloads-at-rack-scale/",
+  "TechSpot GPU delay":"https://www.techspot.com/news/113874-nvidia-amd-next-gaming-gpus-could-delayed-until.html",
+  "DC Review UK connect":"https://datacentrereview.com/2026/09/the-uk-can-build-ai-data-centres-faster-but-can-it-connect-them/",
+  "Indeed Ireland":"https://hiringlab.indeed.com/uk/blog/2026/09/17/the-european-data-centre-build-out/",
+  "Qualcomm Amazon":"https://www.prnewswire.com/news-releases/qualcomm-announces-multi-generational-product-collaboration-with-amazon-to-build-next-generation-ai-data-center-infrastructure-302871895.html",
+  "Winbuzzer Qualcomm":"https://winbuzzer.com/2026/09/09/qualcomm-amazon-ai-data-center-deal-purchase-linked-warrant-xcxwbn/",
+  "DCD Qualcomm AWS":"https://www.datacenterdynamics.com/en/news/qualcomm-and-aws-partner-on-custom-silicon-for-large-scale-ai-data-centers/",
+  "STRisker Sept 29":"https://writing.strisker.com/data-centers-daily-notes-september-29-2026/",
+  "Civo UK":"https://www.intelligentdatacentres.com/2026/09/25/civo-unveils-first-of-40-uk-edge-data-centres-built-to-power-sovereign-ai-compute/",
+  "Rest of World":"https://restofworld.org/2026/gulf-war-data-center-risks/",
+  "Ofgem fee":"https://www.ofgem.gov.uk/press-release/ofgem-acts-free-grid-capacity-tackling-speculative-data-centre-projects",
+  "Qualcomm Investor Day":"https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-Accelerates-Diversification-with-Comprehensive-Strategy-for-Data-Center-and-Sees-Multiple-Inflection-Points-Over-the-Next-3-to-5-Years/default.aspx",
+  "Bloomberg Qualcomm Meta":"https://www.bloomberg.com/news/articles/2026-06-24/qualcomm-announces-new-ai-chips-adds-meta-as-customer",
+  "DCD AWS Homer City":"https://www.datacenterdynamics.com/en/news/aws-plans-36-building-data-center-campus-in-indiana-county-pennsylvania/",
+  "Qai MEEZA":"https://qna.org.qa/en/News-Area/News/2026-10/4/qai-meeza-to-deliver-ai-infrastructure-services",
+  "DigiTimes Qualcomm":"https://www.digitimes.com/news/a20261014PD216/qualcomm-cost-data-materials-technology.html",
+  "Qualcomm DC":"https://www.qualcomm.com/artificial-intelligence/data-center",
+  "UPI Maia 300":"https://www.upi.com/Top_News/US/2026/10/12/microsoft-azure-maia-300-ai-chips-nvidia/3511791823960",
+  "Tech Insider Qualcomm C1000":"https://tech-insider.org/qualcomm-dragonfly-c1000-data-center-cpu-2026/",
+  "24/7 Wall St Qualcomm":"https://247wallst.com/investing/2026/10/14/qualcomm-vs-intel-the-market-is-refuting-both-ai-rebrand-attempts/",
+  "STRisker Oct 14":"https://writing.strisker.com/data-centers-daily-notes-october-14-2026/",
+  "NVIDIA OCP":"https://blogs.nvidia.com/blog/ocp-global-summit-vera-rubin-scale-ai-factories/",
+  "DCD NTT Anthropic":"https://www.datacenterdynamics.com/en/news/ntt-to-build-63bn-data-center-for-anthropic-in-japan-report/",
+  "Iceni UK":"https://www.estatesgazette.co.uk/news/uk-data-centre-capacity-could-triple-by-2030-as-power-crunch-threatens-delivery/",
+  "Tom's Hardware Qualcomm layoffs":"https://www.tomshardware.com/tech-industry/big-tech/qualcomm-to-cut-jobs-globally-in-performance-based-layoffs-ceo-says-move-will-build-stronger-performance-culture-as-company-pivots-to-ai-data-center-and-edge-products",
+  "Qualcomm Q4 date":"https://www.stocktitan.net/news/QCOM/qualcomm-schedules-fourth-quarter-and-fiscal-2026-earnings-release-01jf6ykkm067.html",
+  "Yahoo Qualcomm AI pivot":"https://finance.yahoo.com/technology/ai/articles/qualcomm-cutting-jobs-ai-pivot-123412887.html",
+  "Bosch Rexroth PACK EXPO":"https://www.newsbreak.com/news/4955072291402-bosch-rexroth-exhibiting-extensive-conveyance-and-drive-solutions-at-pack-expo-2026",
+  "ctrlX Configurator":"https://ctrlx-configurator-platform.boschrexroth.com/",
+  "DCD Google Finland":"https://www.datacenterdynamics.com/en/news/google-ordered-to-suspend-site-work-at-two-data-centers-in-finland-following-tree-clearing-controversy/",
+  "DCD Umatilla":"https://www.datacenterdynamics.com/en/news/oregon-city-declares-state-of-emergency-over-lost-data-center-revenue-amid-state-wide-ban/",
+  "WWT DDN Rubin":"https://datacenternews.asia/story/wwt-ddn-launch-ai-storage-design-for-nvidia-vera-rubin",
+  "City AM Nscale":"https://www.cityam.com/microsoft-pulls-out-of-nscale-deal-for-uks-largest-ai-data-centre/",
+  "Motley Fool NEXTDC":"https://www.fool.com.au/2026/10/21/nextdc-slashes-fy27-guidance-after-m3-melbourne-power-delay/",
+  "DCD Anthropic S-1":"https://www.datacenterdynamics.com/en/news/anthropic-files-s-1-for-ipo-with-417bn-in-compute-commitments/",
+  "Resultsense Canterbury":"https://www.resultsense.com/news/2026-10-26-canterbury-era4-ai-data-centre-approved/",
+  "WBTV Charlotte":"https://www.wbtv.com/2026/10/27/data-center-moratorium-extended-city-charlotte-what-know/",
+  "DCD SWI Compute":"https://www.datacenterdynamics.com/en/news/swi-launches-ai-cloud-unit-swi-compute/",
+  "FPS Review Anthropic S-1":"https://www.thefpsreview.com/2026/10/26/anthropic-files-for-ipo-revealing-up-to-165-billion-in-nvidia-gpu-compute-deals-and-a-warning-about-memory-supply/",
+  "SiliconANGLE Meta $95bn":"https://siliconangle.com/2026/10/26/meta-to-sell-up-to-95b-in-stock-to-finance-ai-infrastructure-buildout/",
+  "Fortune Anthropic S-1":"https://fortune.com/2026/10/26/anthropics-s1-ipo-reveals-the-inner-workings-of-its-fast-evolving-compute-strategy/",
+  "Qualcomm IR schedule":"https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-Schedules-Fourth-Quarter-and-Fiscal-2026-Earnings-Release-and-Conference-Call/default.aspx",
+  "Yahoo QCOM preview":"https://finance.yahoo.com/markets/stocks/articles/qcom-stock-earnings-preview-expect-131334130.html",
+  "TradingKey QCOM preview":"https://www.tradingkey.com/analysis/stocks/us-stocks/262266670-qualcomm-q4-earnings-preview-automotive-data-center-smartphone-qcom-tradingkey",
+  "AMD Q3 2026":"https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results",
+  "Bosch Rexroth fairs":"https://www.directindustry.es/ferias/bosch-rexroth-electric-drives-and-controls-5465.html",
+  "Bosch Rexroth Sytronix PR":"https://www.boschrexroth.com/en/at/company/press/sytronix-variable-speed-pump-drives-12994.html",
+  "Resultsense BBC gas":"https://www.resultsense.com/news/2026-11-03-data-centres-gas-power-net-zero-file-on-4/",
+  "WOSU Trenton":"https://www.wosu.org/2026-11-03/trenton-votes-to-ban-data-centers",
+  "DCK NVIDIA AMD Meta":"https://www.datacenterknowledge.com/data-center-chips/nvidia-amd-commit-4b-to-meta-ai-buildout",
+  "DCD Microsoft Q1":"https://datacenterdynamics.com/en/news/microsoft-q3-earnings-data-center-ai-azure-satya-nadella",
+  "DCF SemiAnalysis":"https://www.datacenterfrontier.com/hyperscale/article/55415349/the-50-gigawatt-test-semianalysis-sees-a-historic-data-center-surge-in-2027",
+  "DCD Covenant":"https://datacenterdynamics.com/en/news/uk-budget-grid-connection-incentives-for-data-centers-under-new-covenant",
+  "Yahoo Amon interview":"https://finance.yahoo.com/technology/article/qualcomm-ceo-on-tech-stock-meltdown-there-is-no-ai-correction-for-us-142155683.html",
+  "24/7 Qualcomm shortage":"https://247wallst.com/investing/2026/11/13/qualcomms-ceo-says-chipmakers-are-in-an-extreme-shortage/",
+  "Qualcomm FQ4 call":"https://www.gurufocus.com/news/9172752/qualcomm-inc-qcom-q4-2026-earnings-call-highlights-record-automotive-and-data-center-ramp-offset-handset-headwinds",
+  "Qualcomm WARN":"https://finance.yahoo.com/markets/stocks/articles/qualcomm-laying-off-over-500-065542937.html",
+  "Trefis Qualcomm":"https://www.trefis.com/stock/qcom/articles/625015/your-qualcomm-stock-thesis-has-one-loose-end/2026-11-13",
+  "GuruFocus QCOM downgrade":"https://www.gurufocus.com/news/9185898/qcom-downgraded-by-freedom-broker-price-target-lowered-to-185",
+  "Benzinga QCOM Nov 13":"https://www.benzinga.com/markets/tech/26/11/63247639/whats-going-on-with-qualcomm-stock-friday",
+  "Rexroth ctrlX IPC electronica":"https://www.directindustry.com/prod/bosch-rexroth-electric-drives-controls/product-5465-2111733.html",
+  "Rexroth SPS 2026":"https://insights.globalspec.com/article/25250/bosch-rexroth-brings-agentic-ai-humanoid-robotics-to-sps-2026?from_rss=1",
+  "Statnett pause":"https://www.nordiskpost.com/2026/11/10/norway-data-centres-grid-reservations-pause/",
+  "CoreWeave Q3":"https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Third-Quarter-2026-Results/",
+  "NVIDIA COP31":"https://www.bloomberg.com/news/articles/2026-11-11/nvidia-says-data-centers-should-be-an-asset-to-communities",
+  "TechCrunch export chips":"https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/",
+  "Axios export controls":"https://www.axios.com/2026/11/11/trump-lutnick-nvidia-china-chip-export-controls",
+  "Cerebras outlook":"https://www.bloomberg.com/news/articles/2026-11-12/cerebras-delivers-solid-outlook-in-its-bid-to-challenge-nvidia",
+  "24/7 Bloom vs GE Vernova":"https://247wallst.com/investing/2026/11/09/the-on-site-power-duel-bloom-energy-vs-ge-vernova/",
+  "Torus BW":"https://www.morningstar.com/news/business-wire/20261111907147/torus-launches-modular-ai-infrastructure-foundry-to-meet-surging-ai-inference-demand-and-secures-500m-in-funding",
+  "Torus DCD":"https://www.datacenterdynamics.com/en/news/energy-storage-firm-torus-launches-prefabricated-modular-data-center-product-raises-500m/",
+  "Microsoft power pledge":"https://www.bloomberg.com/news/articles/2026-11-11/microsoft-vows-to-pay-its-own-way-to-power-data-centers",
+  "DRIL Sao Paulo":"https://www.datacenterdynamics.com/en/news/digital-realty-launches-liquid-cooling-lab-in-s%C3%A3o-paulo-brazil/"
+};
+
+// Convert [Source Name] tags in news text to hyperlinks
+function linkNews(text) {
+  let html = esc(text);
+  // Match [Source Name] patterns and replace with linked versions
+  html = html.replace(/\[([^\]]+)\]/g, function(match, name) {
+    const url = NEWS_LINKS[name];
+    if (url) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="news-src" title="Source: ${name}">[${name}]</a>`;
+    }
+    return `<strong style="color:#002147">[${name}]</strong>`;
+  });
+  return html;
+}
+
+// Build tabs nav
+const tabsNav=document.getElementById('tabs');
+[["overview","Overview"],["hardware",`Hardware Catalog (${totalHW})`],["regions","Top 10 by Region"],["market",`Market Data (${MARKET_STATS.length})`]].forEach(([k,l])=>{
+  const btn=document.createElement('button');
+  btn.textContent=l;
+  btn.dataset.tab=k;
+  if(k===activeTab) btn.classList.add('active');
+  btn.onclick=()=>switchTab(k);
+  tabsNav.appendChild(btn);
+});
+
+function switchTab(k){
+  activeTab=k;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===k));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+k));
+}
+
+// ===== OVERVIEW TAB =====
+function renderOverview(){
+  const el=document.getElementById('tab-overview');
+  const stats=[
+    {v:"$3.66bn",l:"CoreWeave Q3 revenue (+168%)",c:"#117ACA",u:"https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Third-Quarter-2026-Results/",s:"CoreWeave IR"},
+    {v:"$132.5bn",l:"CoreWeave revenue backlog",c:"#1E40AF",u:"https://www.tradingkey.com/analysis/stocks/us-stocks/262299527-coreweave-earnings-report-q3-revenue-growth-backlog-capital-expenditures-net-loss-tradingkey",s:"TradingKey"},
+    {v:"$720M",l:"Fractile raise (~$7bn valuation, UK)",c:"#7C3AED",u:"https://techcrunch.com/2026/11/11/with-720m-round-britains-fractile-gets-a-leg-up-in-the-race-for-ai-chips/",s:"TechCrunch"},
+    {v:"$500M",l:"Torus Foundry modular AI DC raise",c:"#10B981",u:"https://www.datacenterdynamics.com/en/news/energy-storage-firm-torus-launches-prefabricated-modular-data-center-product-raises-500m/",s:"DCD"},
+    {v:"20 MW",l:"Syntys AI/HPC DC groundbreaking (Qatar)",c:"#D97706",u:"https://www.datacenterdynamics.com/en/news/syntys-breaks-ground-on-20mw-data-center-in-qatar/",s:"DCD"},
+    {v:"$1.85bn",l:"SoftBank-Grab-PETROS Malaysia seed",c:"#0D9488",u:"https://group.softbank/en/news/press/20261109_0",s:"SoftBank"},
+    {v:"$29.4bn",l:"DC load added to PJM capacity costs",c:"#DC2626",u:"https://www.morningstar.com/news/pr-newswire/20261112ph96438/market-monitor-finds-pjm-wholesale-electricity-markets-competitive",s:"PJM IMM"},
+    {v:"517+",l:"Qualcomm California WARN layoffs",c:"#6366F1",u:"https://finance.yahoo.com/markets/stocks/articles/qualcomm-laying-off-over-500-065542937.html",s:"Yahoo Finance"}
+  ];
+  const wa=[["SC26 Supercomputing -- McCormick Place, Chicago (exhibits Nov 17-19)","Events","Nov 15-20","https://technologyconference.com/sc26-supercomputing-2026-november-15-20-mccormick-place-chicago/"],["NVIDIA at SC26","Compute","Nov 15-20","https://www.nvidia.com/en-us/events/supercomputing/"],["SPS 2026 Nuremberg -- Bosch Rexroth Hall 7, Booth 450","Events","Nov 24-26","https://insights.globalspec.com/article/25250/bosch-rexroth-brings-agentic-ai-humanoid-robotics-to-sps-2026?from_rss=1"],["Qualcomm WARN separations take effect","Compute","Jan 2027","https://finance.yahoo.com/markets/stocks/articles/qualcomm-laying-off-over-500-065542937.html"],["Statnett DC grid-reservation pause (expected minimum)","Energy","to Aug 2027","https://www.nordiskpost.com/2026/11/10/norway-data-centres-grid-reservations-pause/"],["Edmond OK moratorium runs to","Regulation","Jun 30, 2027","https://nondoc.com/2026/11/10/edmond-council-fires-city-attorney-extends-data-center-moratorium/"]];
+  el.innerHTML = `<div class="summary"><strong>Week 46 (Nov 9-15) -- week-exclusive edition</strong>: every item below was published in this week. Nothing is carried over from earlier weeks, and issues that have since been resolved are left out. The week's theme is <strong>neocloud scale-up meets local resistance</strong>: record AI-infrastructure results and fund-raises, while grid operators, towns and courts pushed back on three continents. <strong>HARDWARE</strong>: <strong>CoreWeave Q3</strong> (Nov 10): revenue <strong>$3.66bn (+168%)</strong>, backlog ~<strong>$132.5bn</strong>, Q3 capex $14.5bn, FY26 guide raised to $13.0-13.3bn. <strong>Torus</strong> raised <strong>$500M</strong> and launched <strong>Foundry</strong>, prefabricated 1-20 MW AI modules with flywheel-battery storage, 12-16 weeks from contract to operation. UK chip start-up <strong>Fractile</strong> raised <strong>$720M at ~$7bn</strong> with no chip shipped yet. <strong>Cerebras</strong> guided Q4 to ~$320M (vs $271M consensus) with ~700 MW under contract. SK hynix HBM4 yield reportedly tops 70%, but TrendForce still sees PC DRAM contracts rising 13-18% q/q in 4Q26. Supply-chain risk: TechCrunch (Nov 13) reports export-banned NVIDIA chips are behind China's strongest AI models, and Axios (Nov 11) reports White House-Commerce friction over chip export controls. <strong>QUALCOMM</strong>: CEO <strong>Cristiano Amon</strong> told Yahoo Finance (Nov 12) there is 'no AI correction' for Qualcomm as a data-centre newcomer, and told an investor conference (Nov 13) the industry faces an 'extreme shortage'. California <strong>WARN notices</strong> (Nov 13) cover 442 San Diego County roles plus at least 75 in Santa Clara County, with separations in Jan 2027. Freedom Broker cut the stock to Hold (PT $185, Nov 9), and shares fell ~4% on Nov 13. For reference, the Nov 4 results guided December-quarter DC revenue <strong>above $650M</strong>, with FY27 at $5bn exiting at a $7bn run rate. <strong>SYTRONIX</strong>: no Sytronix-specific news this week. Bosch Rexroth showed its ctrlX IPC at <strong>electronica Munich (Nov 10-13)</strong>; its next show is SPS Nuremberg (Nov 24-26). The week's grid and water fights (Statnett, Batam, Tungkillo) keep cooling-pump efficiency on the agenda. <strong>UK</strong>: Google blamed a <strong>PLC misconfiguration</strong> for its London-zone outage, where generators failed to start, disrupting banks and logistics firms. The <strong>Welsh Government called in the Cardiff East DC</strong> after record objections. <strong>6,000+ marched in Edinburgh</strong> against hyperscale AI DCs. Search Acumen forecasts UK DCs rising ~30% to 785 in 2027. Government opened an up-to-£180m competition to host the next national AI supercomputer, and Defra plans a £4.8m Atos renewal. <strong>QATAR</strong>: <strong>Syntys (Ooredoo) broke ground on a 20 MW AI/HPC data centre</strong> (Nov 12; Tier III-designed, carrier-neutral; value and completion date not disclosed). <strong>GCC</strong>: HUMAIN signed <strong>SAR2.5bn (~$667M)</strong> of GPU and grid financing with Saudi Arabia's National Infrastructure Fund. DAMAC targets a 10 GW pipeline and says build costs are up ~30%. A Mubbadrah-led consortium plans a $3bn, up-to-400 MW AI campus in Salalah, Oman. <strong>EUROPE</strong>: <strong>Statnett paused new DC grid reservations</strong> in Norway (to at least Aug 2027) and Norway plans a DC licensing regime. Thousands protested Lombardy's DC law in <strong>Milan</strong>, where 60+ applications seek ~11 GW. Colt broke ground on 54 MW in Berlin, and Deutsche Telekom adds 20 MW in Munich. <strong>US RISK</strong>: residents filed a <strong>civil RICO suit against OpenAI</strong> and Effingham County, GA officials. SpaceX plans a $24bn DC on land de-annexed to sidestep Brownsville's moratorium. PJM's market monitor says DC load has added <strong>$29.4bn</strong> to capacity costs. Henderson NC, Edmond OK and Center Point IA passed moratoria. The Kraft Group's $16bn, 900 MW Sutton MA plan faces local opposition. <strong>ASIA</strong>: <strong>SoftBank, Grab and PETROS</strong> signed JDAs with $1.85bn of seed capital for Malaysian AI DCs (5 GW+ long-term). Equinix opened its $290M SG6 in Singapore. <strong>NEXTDC halted uncontracted projects</strong>, and Quantum DC paused its 1.2 GW Tungkillo hub after community opposition. <strong>AFRICA</strong>: Magnom and ALG signed a $750M DC deal at Egypt's Forbes International Tower, and Vodacom names SA and Kenya as its next AI hubs. <strong>Trackers</strong>: brockovichdatacenter.com and aidatacenterindex.com could not be re-fetched this week (requests timed out); at our last check (Nov 4) Brockovich showed 'Last updated: October 25, 2026'. No tracker figures are quoted. <strong>Summits this week</strong>: electronica Munich (Nov 10-13); DICE Europe London (Nov 12); <strong>SC26 Chicago starts Nov 15</strong> (runs to Nov 20).</div>
+  <div class="stats-grid">${stats.map(s=>`<div class="stat" style="--sc:${s.c}"><div class="stat-v"><a href="${s.u}" target="_blank" rel="noopener noreferrer" title="Source: ${esc(s.s)}">${s.v}</a></div><div class="stat-l">${s.l} · <a href="${s.u}" target="_blank" rel="noopener noreferrer">${esc(s.s)} ↗</a></div></div>`).join('')}</div>
+  <div class="section-label">WEEK AHEAD</div>
+  <div class="tbl-wrap"><table class="wa-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>#</th><th>Item</th><th>Category</th><th>Timing</th></tr></thead><tbody>${wa.map((r,i)=>`<tr><td class="wa-idx">${String(i+1).padStart(2,'0')}</td><td class="wa-item"><a href="${r[3]}" target="_blank" rel="noopener noreferrer" style="color:#1E3A5F;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#117ACA'" onmouseout="this.style.color='#1E3A5F'">${esc(r[0])} ↗</a></td><td>${catBadge(r[1])}</td><td class="wa-time">${r[2]}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+// ===== HARDWARE TAB =====
+function renderHardware(){
+  const el=document.getElementById('tab-hardware');
+  const cats = hwCat==='all' ? HARDWARE_CATEGORIES : HARDWARE_CATEGORIES.filter(c=>c.category===hwCat);
+  const filters = [{k:'all',l:`All (${totalHW})`},...HARDWARE_CATEGORIES.map(c=>({k:c.category,l:`${c.category.split(' ')[0]} (${c.items.length})`}))];
+  el.innerHTML = `<div class="filter-bar"><span class="filter-label">FILTER</span>${filters.map(f=>`<button class="fbtn${hwCat===f.k?' active':''}" data-hw="${esc(f.k)}">${esc(f.l)}</button>`).join('')}</div>` +
+    cats.map(cat=>`<div style="margin-bottom:26px"><div class="cat-hdr">${cat.category.toUpperCase()} , ${cat.items.length} ITEMS</div><div class="tbl-wrap"><table class="hw-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>Vendor</th><th>Model</th><th>Type</th><th>Status</th><th>Power</th><th>Cooling</th><th>Price</th><th>Notes</th><th class="news-th">Critical News / Standards / Policy</th></tr></thead><tbody>${cat.items.map(it=>`<tr style="vertical-align:top"><td class="vendor-cell">${esc(it.vendor)}</td><td class="model-cell">${esc(it.model)}</td><td class="type-cell">${esc(it.type)}</td><td>${statusBadge(it.status)}</td><td class="mono-cell">${esc(it.power)}</td><td class="cool-cell">${esc(it.cooling)}</td><td class="mono-cell">${esc(it.price)}</td><td class="note-cell">${esc(it.note)}</td><td class="news-cell">${linkNews(it.news)}</td></tr>`).join('')}</tbody></table></div></div>`).join('');
+  el.querySelectorAll('.fbtn').forEach(btn=>btn.onclick=()=>{hwCat=btn.dataset.hw;renderHardware();});
+}
+
+// ===== REGIONS TAB =====
+function renderRegions(){
+  const el=document.getElementById('tab-regions');
+  const r=REGIONS[regIdx];
+  el.innerHTML = `<div style="display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap">${REGIONS.map((rg,i)=>`<button class="rbtn${regIdx===i?' active':''}" data-ri="${i}">${rg.flag} ${esc(rg.region)}</button>`).join('')}</div>
+  <div class="reg-cards"><div class="reg-card" style="--rc:#117ACA"><div class="reg-card-label">MARKET SIZE</div><div class="reg-card-value"><a href="${r.sizeUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--rc);text-decoration:none">${esc(r.size)}</a></div></div><div class="reg-card" style="--rc:#EA580C"><div class="reg-card-label">KEY METRIC</div><div class="reg-card-value"><a href="${r.metricUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--rc);text-decoration:none">${esc(r.metric)}</a></div></div></div>
+  <div class="section-label">TOP 10 , ${r.region.toUpperCase()}</div>
+  <div class="tbl-wrap"><table class="reg-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>#</th><th>Headline</th><th>Impact</th><th>Category</th></tr></thead><tbody>${r.items.map(it=>{const ic=IC_MAP[it.impact];return`<tr><td class="rank-cell">${it.rank}</td><td class="hl-cell"><a href="${it.url}" target="_blank" rel="noopener noreferrer" style="color:#1E3A5F;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#117ACA'" onmouseout="this.style.color='#1E3A5F'">${esc(it.headline)}</a></td><td>${badge(it.impact.toUpperCase(),ic)}</td><td>${catBadge(it.cat)}</td></tr>`;}).join('')}</tbody></table></div>`;
+  el.querySelectorAll('.rbtn').forEach(btn=>btn.onclick=()=>{regIdx=parseInt(btn.dataset.ri);renderRegions();});
+}
+
+// ===== MARKET TAB =====
+function renderMarket(){
+  const el=document.getElementById('tab-market');
+  el.innerHTML = `<div class="section-label">MARKET DATA , ${MARKET_STATS.length} DATAPOINTS</div>
+  <div class="tbl-wrap"><table class="mkt-table"><thead><tr style="border-bottom:1px solid #E5E7EB"><th>#</th><th>Metric</th><th>Value</th><th>Context</th><th>Source</th></tr></thead><tbody>${MARKET_STATS.map((x,i)=>`<tr><td class="idx-cell">${String(i+1).padStart(2,'0')}</td><td class="metric-cell">${esc(x.label)}</td><td class="val-cell">${esc(x.value)}</td><td class="ctx-cell">${esc(x.delta)}</td><td class="src-cell"><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" class="src-link">${esc(x.source)} ↗</a></td></tr>`).join('')}</tbody></table></div>
+  <div class="sources-box"><div class="sources-title">ALL SOURCES , CLICK TO VERIFY</div><div class="src-badges">${ALL_SOURCES.map(s=>`<a href="${s.u}" target="_blank" rel="noopener noreferrer" class="src-badge">${s.n} ↗</a>`).join('')}</div></div>`;
+}
+
+renderOverview();renderHardware();renderRegions();renderMarket();
+</script>
